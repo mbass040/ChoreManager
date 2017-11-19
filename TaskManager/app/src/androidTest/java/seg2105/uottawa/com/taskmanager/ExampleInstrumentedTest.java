@@ -1,4 +1,4 @@
-package seg2105.uottawa.com.choremanager;
+package seg2105.uottawa.com.taskmanager;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

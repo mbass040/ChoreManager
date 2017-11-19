@@ -1,4 +1,4 @@
-package seg2105.uottawa.com.choremanager;
+package seg2105.uottawa.com.taskmanager;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;

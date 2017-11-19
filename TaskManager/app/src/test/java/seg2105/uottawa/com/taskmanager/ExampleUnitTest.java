@@ -1,4 +1,4 @@
-package seg2105.uottawa.com.choremanager;
+package seg2105.uottawa.com.taskmanager;
 
 import org.junit.Test;
 

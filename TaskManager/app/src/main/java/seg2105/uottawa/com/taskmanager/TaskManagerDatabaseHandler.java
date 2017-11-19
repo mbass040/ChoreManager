@@ -1,4 +1,4 @@
-package seg2105.uottawa.com.choremanager;
+package seg2105.uottawa.com.taskmanager;
 
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteDatabase;
