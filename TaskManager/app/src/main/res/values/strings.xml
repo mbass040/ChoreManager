@@ -5,4 +5,14 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="switch_user">Switch User</string>
     <string name="action_settings">Settings</string>
+    <string name="nav_open_task">Open Tasks</string>
+    <string name="nav_shopping_list">Shopping List</string>
+    <string name="nav_schedule">Schedule</string>
+    <string name="nav_task_backlog">Task Backlog</string>
+    <string name="nav_people">People</string>
+    <string name="nav_cupboard_fridge">Cupboard and Fridge</string>
+    <string name="nav_broom_closet">Broom Closet (Tools)</string>
+
+
+
 </resources>
