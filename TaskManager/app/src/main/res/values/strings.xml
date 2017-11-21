@@ -12,5 +12,6 @@
     <string name="nav_people">People</string>
     <string name="nav_cupboard_fridge">Cupboard and Fridge</string>
     <string name="nav_broom_closet">Broom Closet (Tools)</string>
+    <string name="title_activity_specific_task">SpecificTaskActivity</string>
 
 </resources>
