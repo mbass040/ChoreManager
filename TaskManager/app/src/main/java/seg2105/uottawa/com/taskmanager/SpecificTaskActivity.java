@@ -18,14 +18,12 @@ public class SpecificTaskActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_specific_task);
 
-        Intent intent = getIntent();
+        //Intent intent = getIntent();
         Task task = new Task("Clean Pool");
 
         setTitle(task.getName());
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabEditTask);
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     public void editTask(View view) {

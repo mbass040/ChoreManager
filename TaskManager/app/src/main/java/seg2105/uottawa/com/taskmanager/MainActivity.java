@@ -145,6 +145,6 @@ public class MainActivity extends AppCompatActivity
         //Pass task's ID to the detail activity so that it can load the task's values
         //intent.putExtra("taskID", -1);
 
-        startActivity(intent);
+        startActivityForResult(intent, RESULT_OK);
     }
 }
