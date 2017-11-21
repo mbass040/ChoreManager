@@ -22,7 +22,7 @@
         <activity
             android:name=".SpecificTaskActivity"
             android:label="@string/title_activity_specific_task"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName="seg2105.uottawa.com.taskmanager.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
