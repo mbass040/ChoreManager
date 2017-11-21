@@ -1,6 +1,7 @@
 package seg2105.uottawa.com.taskmanager;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -21,6 +22,8 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import seg2105.uottawa.com.taskmanager.source.Task;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -134,5 +137,14 @@ public class MainActivity extends AppCompatActivity
         });
         AlertDialog alert = builder.create();
         alert.show();
+    }
+
+    public void viewTaskDetails(View view) {
+        Intent intent = new Intent(this, SpecificTaskActivity.class);
+
+        //Pass task's ID to the detail activity so that it can load the task's values
+        //intent.putExtra("taskID", -1);
+
+        startActivity(intent);
     }
 }
