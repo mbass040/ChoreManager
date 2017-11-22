@@ -184,21 +184,51 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/lblEquipmentNeeded"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+
                 android:text="@string/equipmentNeeded"
-                android:textAllCaps="false"
                 android:textColor="@android:color/black"
                 android:textSize="17sp"
                 android:textStyle="bold" />
+
+            <seg2105.uottawa.com.taskmanager.MaxHeightGridView
+                android:id="@+id/gvEquipmentList"
+                android:layout_width="match_parent"
+                android:layout_height="157dp"
+                android:numColumns="2" />
+
         </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_marginTop="2dp"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"/>
+
+        <TextView
+            android:id="@+id/lblNotes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="@string/notes"
+            android:textColor="@android:color/black"
+            android:textSize="17sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textView7"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus quis purus tristique, congue sapien id, convallis augue. Duis tincidunt pulvinar ultrices. Nunc augue lorem, pretium at lacus et, dapibus fringilla orci. Etiam vel vestibulum mi. Aliquam pulvinar quam lorem, sit amet rhoncus metus tincidunt at."
+            android:textColor="#444" />
 
     </LinearLayout>
 

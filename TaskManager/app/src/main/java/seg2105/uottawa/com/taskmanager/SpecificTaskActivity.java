@@ -3,14 +3,16 @@ package seg2105.uottawa.com.taskmanager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.GridView;
 
-import seg2105.uottawa.com.taskmanager.R;
+import java.util.ArrayList;
+import java.util.List;
+
 import seg2105.uottawa.com.taskmanager.source.Task;
 
 public class SpecificTaskActivity extends AppCompatActivity {
@@ -24,6 +26,20 @@ public class SpecificTaskActivity extends AppCompatActivity {
         Task task = new Task("Clean Pool");
 
         setTitle(task.getName());
+
+        List<String> equipmentList = new ArrayList<>();
+        equipmentList.add(Html.fromHtml("&#8226;") + " Pool Vacuum");
+        equipmentList.add(Html.fromHtml("&#8226;") + " Chlorine");
+        equipmentList.add(Html.fromHtml("&#8226;") + " Sponge");
+        equipmentList.add(Html.fromHtml("&#8226;") + " Soap");
+
+        GridView gvTaskEquipment = (GridView) findViewById(R.id.gvEquipmentList);
+
+        // Create adapter to load list items into the equipment GridView
+        ArrayAdapter<String> equipAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, equipmentList);
+
+        // Show the list items in the grid
+        gvTaskEquipment.setAdapter(equipAdapter);
     }
 
     public void editTask(View view) {
