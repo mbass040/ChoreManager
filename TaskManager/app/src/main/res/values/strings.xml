@@ -15,5 +15,16 @@
     <string name="title_activity_specific_task">Temp Task Name</string>
     <string name="assignedTo">Assigned To:</string>
     <string name="unassign">Unassign</string>
+    <string name="vertical_ellipsis">&#8942;</string>
+    <string name="taskOptionTitle">Task Options</string>
+    <string name="taskCreatedBy">Created By</string>
+    <string name="equipmentNeeded">Equipment Needed</string>
+
+    <string-array name="taskOptions">
+        <item>Unassign Task</item>
+        <item>Task Completed</item>
+        <item>Postpone Task</item>
+        <item>Delete Task</item>
+    </string-array>
 
 </resources>
