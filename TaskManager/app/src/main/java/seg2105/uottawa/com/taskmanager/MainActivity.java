@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -17,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -136,16 +138,38 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if(items[which].equals("***NEW USER***")){ // opens a new window to with a form for the new user
-                    Intent newUserIntent = new Intent(MainActivity.this, NewUserActivity.class);
-                    startActivity(newUserIntent);
-                }else
+                    createName();
+                }else{
                     txtName.setText(items[which]);
+                }
             }
         });
         AlertDialog alert = builder.create();
         alert.show();
     }
 
+    public void createName(){
+        //create a alert dialog box that will prompt the new user to enter his name
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setTitle("What is your name?");
+        final EditText etName = new EditText(this);
+        alert.setView(etName);
+        alert.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+            @Override //when user clicks on save after entering his name
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+
+        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override //when user clicks on Cancel
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+
+        alert.show();
+    }
     public void viewTaskDetails(View view) {
         Intent intent = new Intent(this, SpecificTaskActivity.class);
 
