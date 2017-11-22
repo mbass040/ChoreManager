@@ -27,6 +27,7 @@ public class TaskManagerDatabaseHandler extends SQLiteOpenHelper {
 
     // Task Table Column Names
     public static final String TASK_ID = "task_id";
+    public static final String TASK_NAME = "task_name";
     public static final String TASK_NOTES = "task_notes";
     public static final String TASK_DEADLINE = "task_deadline";
     public static final String TASK_POINT_VALUE = "task_point_value";
