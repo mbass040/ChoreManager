@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onBackPressed() {
+    public void onBackPressed() { //when the user clicks the back button on his Android
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
@@ -117,14 +117,17 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    // activated when a user clicks on teh Switch User button in the navigation drawer
     public void btnChangeUser(View view){
         txtName = (TextView) findViewById(R.id.txtUser);
 
+        //hardcoded for now but later to be added dynamically
         final String[] items = new String[] {"Rasheed Wallace"
                 , "Ben Wallace"
                 , "Christopher Wallace"
                 , "DeAndre Wallace"
                 , "Bonifa Jackson"
+                , "***NEW USER***"
         };
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -132,7 +135,11 @@ public class MainActivity extends AppCompatActivity
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                txtName.setText(items[which]);
+                if(items[which].equals("***NEW USER***")){ // opens a new window to with a form for the new user
+                    Intent newUserIntent = new Intent(MainActivity.this, NewUserActivity.class);
+                    startActivity(newUserIntent);
+                }else
+                    txtName.setText(items[which]);
             }
         });
         AlertDialog alert = builder.create();
