@@ -28,6 +28,9 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="seg2105.uottawa.com.taskmanager.MainActivity" />
         </activity>
+<<<<<<< HEAD
+=======
+>>>>>>> ecc62a05fdc270f16a0c607d948f86be12d15969
     </application>
 
 </manifest>
