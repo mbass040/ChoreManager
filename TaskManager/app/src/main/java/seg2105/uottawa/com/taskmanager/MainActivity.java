@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onBackPressed() {
+    public void onBackPressed() { //when the user clicks the back button on his Android
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
@@ -109,24 +109,27 @@ public class MainActivity extends AppCompatActivity
 //        } else if (id == R.id.nav_manage) {
 //
 //        } else if (id == R.id.nav_share) {
-        if (id == R.id.nav_broom) {
-            Intent intent = new Intent(getApplicationContext(),EquipmentActivity.class);
-            startActivityForResult(intent,0);
-        }
+//
+//        } else if (id == R.id.nav_send) {
+//
+//        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
+    // activated when a user clicks on teh Switch User button in the navigation drawer
     public void btnChangeUser(View view){
         txtName = (TextView) findViewById(R.id.txtUser);
 
+        //hardcoded for now but later to be added dynamically
         final String[] items = new String[] {"Rasheed Wallace"
                 , "Ben Wallace"
                 , "Christopher Wallace"
                 , "DeAndre Wallace"
                 , "Bonifa Jackson"
+                , "***NEW USER***"
         };
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -175,5 +178,4 @@ public class MainActivity extends AppCompatActivity
 
         startActivityForResult(intent, RESULT_OK);
     }
-
 }
