@@ -17,11 +17,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
-<<<<<<< HEAD
-=======
 import android.widget.EditText;
-import android.widget.Spinner;
->>>>>>> 2a844ebeb28f66d12311c0bb96db2ac6bbaeb8ce
 import android.widget.TextView;
 import android.support.design.widget.TabLayout;
 
