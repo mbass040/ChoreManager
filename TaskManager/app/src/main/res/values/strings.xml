@@ -12,5 +12,19 @@
     <string name="nav_people">People</string>
     <string name="nav_cupboard_fridge">Cupboard and Fridge</string>
     <string name="nav_broom_closet">Broom Closet (Tools)</string>
+    <string name="title_activity_specific_task">Temp Task Name</string>
+    <string name="assignedTo">Assigned To</string>
+    <string name="vertical_ellipsis">&#8942;</string>
+    <string name="taskOptionTitle">Task Options</string>
+    <string name="taskCreatedBy">Created By</string>
+    <string name="equipmentNeeded">Equipment Needed</string>
+    <string name="notes">Notes</string>
+
+    <string-array name="taskOptions">
+        <item>Unassign Task</item>
+        <item>Task Completed</item>
+        <item>Postpone Task</item>
+        <item>Delete Task</item>
+    </string-array>
 
 </resources>
