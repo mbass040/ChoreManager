@@ -1,10 +1,12 @@
 package seg2105.uottawa.com.taskmanager;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -15,9 +17,16 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+<<<<<<< HEAD
+=======
+import android.widget.EditText;
+import android.widget.Spinner;
+>>>>>>> 2a844ebeb28f66d12311c0bb96db2ac6bbaeb8ce
 import android.widget.TextView;
 import android.support.design.widget.TabLayout;
 
+
+import seg2105.uottawa.com.taskmanager.source.Task;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -55,7 +64,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onBackPressed() {
+    public void onBackPressed() { //when the user clicks the back button on his Android
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
@@ -111,14 +120,17 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    // activated when a user clicks on teh Switch User button in the navigation drawer
     public void btnChangeUser(View view){
         txtName = (TextView) findViewById(R.id.txtUser);
 
+        //hardcoded for now but later to be added dynamically
         final String[] items = new String[] {"Rasheed Wallace"
                 , "Ben Wallace"
                 , "Christopher Wallace"
                 , "DeAndre Wallace"
                 , "Bonifa Jackson"
+                , "***NEW USER***"
         };
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -126,10 +138,45 @@ public class MainActivity extends AppCompatActivity
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                txtName.setText(items[which]);
+                if(items[which].equals("***NEW USER***")){ // opens a new window to with a form for the new user
+                    createName();
+                }else{
+                    txtName.setText(items[which]);
+                }
             }
         });
         AlertDialog alert = builder.create();
         alert.show();
+    }
+
+    public void createName(){
+        //create a alert dialog box that will prompt the new user to enter his name
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setTitle("What is your name?");
+        final EditText etName = new EditText(this);
+        alert.setView(etName);
+        alert.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+            @Override //when user clicks on save after entering his name
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+
+        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override //when user clicks on Cancel
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+
+        alert.show();
+    }
+    public void viewTaskDetails(View view) {
+        Intent intent = new Intent(this, SpecificTaskActivity.class);
+
+        //Pass task's ID to the detail activity so that it can load the task's values
+        //intent.putExtra("taskID", -1);
+
+        startActivityForResult(intent, RESULT_OK);
     }
 }
