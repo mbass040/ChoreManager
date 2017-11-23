@@ -5,10 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="seg2105.uottawa.com.taskmanager.MainActivity"
+    tools:context="seg2105.uottawa.com.choremanager.MainActivity"
     tools:showIn="@layout/app_bar_main">
 
-<<<<<<< HEAD
     <LinearLayout
         android:layout_width="368dp"
         android:layout_height="439dp"
@@ -65,9 +64,6 @@
             android:layout_weight="1"
             android:orientation="horizontal"></LinearLayout>
 
-    </LinearLayout><![CDATA[
-=======
-    >>>>>>> 2a844ebeb28f66d12311c0bb96db2ac6bbaeb8ce
+    </LinearLayout>
 
-]]>
 </android.support.constraint.ConstraintLayout>
