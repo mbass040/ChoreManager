@@ -29,6 +29,10 @@
                 android:value="seg2105.uottawa.com.taskmanager.MainActivity" />
         </activity>
         <activity android:name=".NewUserActivity"></activity>
+        <activity
+            android:name=".EquipmentActivity"
+            android:label="@string/title_equipment_activity"
+            android:parentActivityName=".MainActivity" />
     </application>
 
 </manifest>
