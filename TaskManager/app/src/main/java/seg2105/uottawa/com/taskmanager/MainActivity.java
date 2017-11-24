@@ -111,6 +111,16 @@ public class MainActivity extends AppCompatActivity
 //
 //        }
 
+        // Temporary for testing
+        if (id == R.id.nav_open_task) {
+            Intent intent = new Intent(this, SpecificTaskActivity.class);
+
+            //Pass task's ID to the detail activity so that it can load the task's values
+            //intent.putExtra("taskID", -1);
+
+            startActivityForResult(intent, RESULT_OK);
+        }
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;

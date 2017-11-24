@@ -107,6 +107,40 @@
                 android:orientation="vertical">
 
                 <LinearLayout
+                    android:id="@+id/lytHrsWrite"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:orientation="horizontal"
+                    android:visibility="gone"
+                    android:weightSum="1">
+
+                    <ImageView
+                        android:id="@+id/imgClock2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        app:srcCompat="@drawable/ic_access_time" />
+
+                    <EditText
+                        android:id="@+id/txtHoursToComplete"
+                        android:layout_width="44dp"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:inputType="numberDecimal"
+                        android:text="2"
+                        android:textSize="13sp" />
+
+                    <TextView
+                        android:id="@+id/lblHrs"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="hours" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/lytHrsRead"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
@@ -129,6 +163,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/lytDateRead"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
@@ -148,6 +183,32 @@
                         android:layout_weight="1"
                         android:text="Dec. 2, 2017"
                         android:textSize="17sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/lytDateWrite"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/imgCalendar2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/ic_perm_contact_calendar" />
+
+                    <EditText
+                        android:id="@+id/txtCompDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ems="10"
+                        android:inputType="textPersonName"
+                        android:text="Dec. 2, 2017"
+                        android:textSize="13sp" />
+
                 </LinearLayout>
             </LinearLayout>
 
@@ -188,15 +249,28 @@
             android:layout_marginTop="5dp"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/lblEquipmentNeeded"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
 
-                android:text="@string/equipmentNeeded"
-                android:textColor="@android:color/black"
-                android:textSize="17sp"
-                android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/lblEquipmentNeeded"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/equipmentNeeded"
+                    android:textColor="@android:color/black"
+                    android:textSize="17sp"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/btnAddEquipment"
+                    android:layout_width="60dp"
+                    android:layout_height="37dp"
+                    android:layout_marginLeft="5dp"
+                    android:text="Add"
+                    android:visibility="gone"/>
+            </LinearLayout>
 
             <seg2105.uottawa.com.taskmanager.MaxHeightGridView
                 android:id="@+id/gvEquipmentList"
@@ -223,12 +297,23 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/textView7"
+            android:id="@+id/tvNotes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
             android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus quis purus tristique, congue sapien id, convallis augue. Duis tincidunt pulvinar ultrices. Nunc augue lorem, pretium at lacus et, dapibus fringilla orci. Etiam vel vestibulum mi. Aliquam pulvinar quam lorem, sit amet rhoncus metus tincidunt at."
             android:textColor="#444" />
+
+        <EditText
+            android:id="@+id/txtNotes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textMultiLine"
+            android:maxLength="250"
+            android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus quis purus tristique, congue sapien id, convallis augue. Duis tincidunt pulvinar ultrices. Nunc augue lorem, pretium at lacus et, dapibus fringilla orci. Etiam vel vestibulum mi. Aliquam pulvinar quam lorem, sit amet rhoncus metus tincidunt at."
+            android:textSize="14sp"
+            android:visibility="gone" />
 
     </LinearLayout>
 
