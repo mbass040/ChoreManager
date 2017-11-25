@@ -7,7 +7,7 @@ package seg2105.uottawa.com.taskmanager.source;
 public class Item {
     protected String itemName = "Name Not Defined";
 
-    public Item(String name) {
+    public Item(String name,String a) {
         this.itemName = name;
     }
     public Item(){
