@@ -31,10 +31,10 @@ public class EquipmentArrayAdapter extends ArrayAdapter<Equipment> {
 
         View rowView = inflater.inflate(R.layout.equipment_item_layout, parent, false);
         TextView recipeName = (TextView) rowView.findViewById(R.id.itemName);
-        TextView recipeDescription = (TextView) rowView.findViewById(R.id.itemDescription);
+
 
         recipeName.setText(curEquipments.getEquipmentName());
-        recipeDescription.setText((curEquipments.getEquipmentDescription()));
+
 
         return rowView;
     }
