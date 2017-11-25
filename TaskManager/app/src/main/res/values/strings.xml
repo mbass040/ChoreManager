@@ -29,11 +29,14 @@
     <string name="lblEquipment">Equipment:</string>
     <string name="lblNotes">Notes:</string>
     <string name="selectUser">Select a user</string>
+    <string name="grocerie">Grocerie</string>
+    <string name="material">Material</string>
     <string-array name="taskOptions">
         <item>Unassign Task</item>
         <item>Task Completed</item>
         <item>Postpone Task</item>
         <item>Delete Task</item>
     </string-array>
+    <string name="title_activity_shopping_list">Shopping List</string>
 
 </resources>

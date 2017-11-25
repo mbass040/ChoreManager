@@ -36,6 +36,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import seg2105.uottawa.com.taskmanager.source.ShoppingList;
 import seg2105.uottawa.com.taskmanager.source.Task;
 
 import static seg2105.uottawa.com.taskmanager.R.id.lvTaskList;
@@ -54,9 +55,6 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         tmDB = new TaskManagerDatabaseHandler(getApplicationContext());
         ListView taskListView = (ListView) findViewById(lvTaskList);
-
-        //Puts Name of task and its description as Key/Value pairs
-        HashMap<String, String> taskName = new HashMap<>();
 
         final List<String[]> taskList = new LinkedList<String[]>();
         taskList.add(new String []{"Shopping", "17 items in List"});
@@ -172,6 +170,10 @@ public class MainActivity extends AppCompatActivity
             //intent.putExtra("taskID", -1);
 
             startActivityForResult(intent, RESULT_OK);
+        }
+        else if (id == R.id.nav_shop){
+            Intent intent = new Intent(this, ShoppingList.class);
+            startActivityForResult(intent,RESULT_OK);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
