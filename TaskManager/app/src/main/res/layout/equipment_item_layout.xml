@@ -10,8 +10,8 @@
         android:orientation="horizontal">
 
         <LinearLayout
-            android:layout_width="335dp"
-            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
             android:layout_gravity="center"
             android:gravity="center_vertical|center_horizontal"
             android:orientation="vertical"
@@ -30,15 +30,6 @@
                 android:textSize="22sp"
                 android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/itemDescription"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center_vertical"
-                android:text="Task equipment needed"
-                android:textSize="14sp"
-                android:textStyle="italic" />
         </LinearLayout>
 
     </LinearLayout>
