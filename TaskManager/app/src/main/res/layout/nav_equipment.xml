@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    android:layout_width="400dp"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
@@ -21,36 +21,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="10dp"
-        android:text="Equipment Name: "
+        android:text="Equipment Name:                   "
         android:textSize="20dp" />
 
     <EditText
         android:id="@+id/txtEquipment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="text"
-        android:imeOptions="actionDone"
         android:layout_marginTop="5dp"
-        />
+        android:imeOptions="actionDone"
+        android:inputType="text" />
 
     <Space
         android:layout_width="match_parent"
         android:layout_height="20dp" />
-
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Task name of the equipment:"
-        android:textSize="20dp" />
-
-    <EditText
-        android:id="@+id/txtTask"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="text"
-        android:imeOptions="actionDone"
-        android:layout_marginTop="5dp" />
 
     <LinearLayout
         android:layout_width="match_parent"

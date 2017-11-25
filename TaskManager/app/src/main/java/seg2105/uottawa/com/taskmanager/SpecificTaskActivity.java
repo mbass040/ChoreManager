@@ -38,7 +38,6 @@ public class SpecificTaskActivity extends AppCompatActivity {
 
         setTitle(task.getName());
 
-        // Populate the task equipment list
         List<String> equipmentList = new ArrayList<>();
         equipmentList.add(Html.fromHtml("&#8226;") + " Pool Vacuum");
         equipmentList.add(Html.fromHtml("&#8226;") + " Chlorine");

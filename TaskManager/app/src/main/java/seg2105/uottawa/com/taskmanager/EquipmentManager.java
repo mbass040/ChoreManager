@@ -2,13 +2,15 @@ package seg2105.uottawa.com.taskmanager;
 
 import java.util.ArrayList;
 
+import seg2105.uottawa.com.taskmanager.source.Item;
+
 /**
  * Created by milena_dionnne on 2017-11-22.
  */
 
 public class EquipmentManager {
     private static EquipmentManager instance = null;
-    private ArrayList<Equipment> equipmentList;
+    private ArrayList<Item> itemList;
 
     protected EquipmentManager() {
         //This Exists to defeat instantiation
@@ -17,11 +19,11 @@ public class EquipmentManager {
                 "Soap", "Towel", "Windex", "Comet", "Rope", "", "empty", "empty", "empty", "Last Supper"
         };
 
-        equipmentList = new ArrayList<>();
+        itemList = new ArrayList<>();
 
         for (int i = 0; i < values.length ; i++) {
-            Equipment newEquipment = new Equipment(values[i],"Task name: ");
-            equipmentList.add(newEquipment);
+            //Item newItem = new Item(values[i],"Task name: ");
+            //itemList.add(newItem);
         }
     }
 
@@ -32,13 +34,13 @@ public class EquipmentManager {
         return instance;
     }
 
-    public ArrayList<Equipment> getEquipmentList() {
+    public ArrayList<Item> getItemList() {
 
-        return equipmentList;
+        return itemList;
     }
 
-    public Equipment getRecipeAt(int index) {
+    public Item getRecipeAt(int index) {
 
-        return equipmentList.get(index);
+        return itemList.get(index);
     }
 }
