@@ -50,9 +50,6 @@ public class MainActivity extends AppCompatActivity
 
         ListView taskListView = (ListView) findViewById(lvTaskList);
 
-        //Puts Name of task and its description as Key/Value pairs
-        HashMap<String, String> taskName = new HashMap<>();
-
         final List<String[]> taskList = new LinkedList<String[]>();
         taskList.add(new String []{"Shopping", "17 items in List"});
         taskList.add(new String []{"Vaccum Living Room", "Deadline: Tonight - Unassigned"});
