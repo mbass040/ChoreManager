@@ -20,6 +20,8 @@
     <string name="equipmentNeeded">Equipment Needed</string>
     <string name="notes">Notes</string>
     <string name="title_equipment_activity">Tools</string>
+    <string name="grocerie">Grocerie</string>
+    <string name="material">Material</string>
 
     <string-array name="taskOptions">
         <item>Unassign Task</item>
@@ -27,5 +29,6 @@
         <item>Postpone Task</item>
         <item>Delete Task</item>
     </string-array>
+    <string name="title_activity_shopping_list">Shopping List</string>
 
 </resources>
