@@ -35,5 +35,6 @@
         <item>Postpone Task</item>
         <item>Delete Task</item>
     </string-array>
+    <string name="title_activity_shopping_list">Shopping List</string>
 
 </resources>

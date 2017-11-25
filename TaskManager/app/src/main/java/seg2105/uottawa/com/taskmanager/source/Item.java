@@ -1,28 +1,28 @@
-package seg2105.uottawa.com.taskmanager;
+package seg2105.uottawa.com.taskmanager.source;
 
 /**
  * Created by milena_dionnne on 2017-11-22.
  */
 
-public class Equipment {
+public class Item {
     private String equipmentName = "Name Not Defined";
     private String equipmentDescription = "Description Not Defined";
 
-    public Equipment(String name, String description) {
+    public Item(String name, String description) {
         this.equipmentName = name;
         this.equipmentDescription = description;
     }
 
     //Here would go some code to manage the information in this class
-    public String getEquipmentName() {
+    public String getItemName() {
         return equipmentName;
     }
 
-    public void setEquipmentName(String newName) {
+    public void setItemName(String newName) {
          equipmentName= newName;
     }
 
-    public String getEquipmentDescription() {
+    public String getItemDescription() {
         return equipmentDescription;
     }
 

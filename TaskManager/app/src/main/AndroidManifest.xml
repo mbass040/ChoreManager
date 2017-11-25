@@ -28,11 +28,20 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="seg2105.uottawa.com.taskmanager.MainActivity" />
         </activity>
-        <activity android:name=".NewUserActivity"></activity>
+        <activity android:name=".NewUserActivity" />
         <activity
             android:name=".EquipmentActivity"
             android:label="@string/title_equipment_activity"
             android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".ShoppingList"
+            android:label="@string/title_activity_shopping_list"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="seg2105.uottawa.com.taskmanager.MainActivity" />
+        </activity>
     </application>
 
 </manifest>
