@@ -58,6 +58,8 @@ public class MainActivity extends AppCompatActivity
         taskList.add(new String []{"Wash Dishes", "Repeat: Daily"});
         taskList.add(new String []{"Call Veterinary", "Note: Urgent"});
 
+
+        //creates a simple listView with an Item and subitem to be able to give a task a name and a description
         ArrayAdapter<String[]> adapter = new ArrayAdapter<String[]>(this, android.R.layout.simple_list_item_2, android.R.id.text1, taskList){
             @Override
             public View getView(int position, View convertView, ViewGroup parent){
