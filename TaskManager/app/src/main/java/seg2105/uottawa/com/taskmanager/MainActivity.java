@@ -48,8 +48,6 @@ public class MainActivity extends AppCompatActivity
 
         ListView taskListView = (ListView) findViewById(lvTaskList);
 
-        //Puts Name of task and its description as Key/Value pairs
-        HashMap<String, String> taskName = new HashMap<>();
 
         List<String> equipmentList = new ArrayList<>();
         equipmentList.add("Clean Pool");
