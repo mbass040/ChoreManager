@@ -22,14 +22,22 @@ public class EquipmentActivity extends FragmentActivity {
 
         EquipmentArrayAdapter adapter = new EquipmentArrayAdapter(this, manager.getItemList());
         listView.setAdapter(adapter);
+
+
     }
 
     public void btnShowDialog(View view){
+        showEquipmentDialog();
+    }
+
+    public void showEquipmentDialog(){
         FragmentManager fragmentManager = getSupportFragmentManager();
         AddEquipment addEquipment = new AddEquipment();
         addEquipment.setDialogTitle("Enter equipment name");
         addEquipment.show(fragmentManager, "Input Dialog");
     }
+
+
 
     protected void onActivityResult(int requestCode, int resultCode, Intent datEquipmenta) {
         ListView listView = (ListView) findViewById(R.id.list);

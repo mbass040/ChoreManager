@@ -14,12 +14,16 @@ public class AddEquipment extends DialogFragment {
     Button btnCancel;
     static String DialogboxTitle;
 
+    public interface InputNameDialogListener {
+        void onFinishInputDialog(String inputText);
+    }
+
+    //---empty constructor required
     public AddEquipment() {
 
     }
-
+    //---set the title of the dialog window
     public void setDialogTitle(String title) {
-
         DialogboxTitle = title;
     }
 
