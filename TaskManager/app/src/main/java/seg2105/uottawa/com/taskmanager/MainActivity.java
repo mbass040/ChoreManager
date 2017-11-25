@@ -16,9 +16,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -37,11 +39,14 @@ public class MainActivity extends AppCompatActivity
 
     private TextView txtName;
     private Button btnSwitchUser;
+    private TaskManagerDatabaseHandler tmDB;
+    private String newName = "";
+    List<String>  userList = new ArrayList<String>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        tmDB = new TaskManagerDatabaseHandler(getApplicationContext());
         ListView taskListView = (ListView) findViewById(lvTaskList);
 
         //Puts Name of task and its description as Key/Value pairs
@@ -145,30 +150,32 @@ public class MainActivity extends AppCompatActivity
     // activated when a user clicks on teh Switch User button in the navigation drawer
     public void btnChangeUser(View view){
         txtName = (TextView) findViewById(R.id.txtUser);
-
-        //hardcoded for now but later to be added dynamically
-        final String[] items = new String[] {"Rasheed Wallace"
-                , "Ben Wallace"
-                , "Christopher Wallace"
-                , "DeAndre Wallace"
-                , "Bonifa Jackson"
-                , "***NEW USER***"
-        };
-
+        ListView lvUser = new ListView(this);
+        userList = tmDB.getAllUsers();
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Select a user");
-        builder.setItems(items, new DialogInterface.OnClickListener() {
+        builder.setTitle(R.string.selectUser);
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_list_item_1, userList);
+        lvUser.setAdapter(arrayAdapter);
+        builder.setView(lvUser);
+
+        //when user selects item
+        lvUser.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if(items[which].equals("***NEW USER***")){ // opens a new window to with a form for the new user
-                    createName();
-                }else{
-                    txtName.setText(items[which]);
-                }
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                txtName.setText(userList.get(position));
             }
         });
-        AlertDialog alert = builder.create();
-        alert.show();
+        builder.setPositiveButton("New User", new DialogInterface.OnClickListener() {
+            @Override //when user clicks on save after entering his name
+            public void onClick(DialogInterface dialog, int which) {
+                createName();
+                txtName.setText(newName);
+            }
+        });
+
+        builder.show();
+
+
     }
 
     public void createName(){
@@ -180,18 +187,20 @@ public class MainActivity extends AppCompatActivity
         alert.setPositiveButton("Save", new DialogInterface.OnClickListener() {
             @Override //when user clicks on save after entering his name
             public void onClick(DialogInterface dialog, int which) {
-
+                newName = etName.getText().toString();
+                tmDB.insertUser(newName);
             }
         });
 
         alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override //when user clicks on Cancel
             public void onClick(DialogInterface dialog, int which) {
-
+                dialog.dismiss();
             }
         });
 
         alert.show();
+
     }
 
     public void newTask(View view) {

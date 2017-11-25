@@ -28,7 +28,7 @@
     <string name="deadline">Deadline:</string>
     <string name="lblEquipment">Equipment:</string>
     <string name="lblNotes">Notes:</string>
-
+    <string name="selectUser">Select a user</string>
     <string-array name="taskOptions">
         <item>Unassign Task</item>
         <item>Task Completed</item>
