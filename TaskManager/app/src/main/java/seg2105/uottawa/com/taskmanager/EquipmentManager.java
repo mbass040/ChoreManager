@@ -11,6 +11,7 @@ import seg2105.uottawa.com.taskmanager.source.Item;
 public class EquipmentManager {
     private static EquipmentManager instance = null;
     private ArrayList<Item> itemList;
+    public static final String intentIndexTitle = "selectedEquipment";
 
     protected EquipmentManager() {
         //This Exists to defeat instantiation
@@ -22,7 +23,7 @@ public class EquipmentManager {
         itemList = new ArrayList<>();
 
         for (int i = 0; i < values.length ; i++) {
-            Item newItem = new Item(values[i],"Task name: ");
+            Item newItem = new Item(values[i]);
             itemList.add(newItem);
         }
     }
@@ -39,7 +40,7 @@ public class EquipmentManager {
         return itemList;
     }
 
-    public Item getRecipeAt(int index) {
+    public Item getEquipmentAt(int index) {
 
         return itemList.get(index);
     }

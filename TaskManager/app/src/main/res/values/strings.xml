@@ -20,6 +20,10 @@
     <string name="equipmentNeeded">Equipment Needed</string>
     <string name="notes">Notes</string>
     <string name="title_equipment_activity">Tools</string>
+    <string name="create">Add</string>
+    <string name="cancel">Cancel</string>
+    <string name="newEquipment">New Equipment</string>
+
 
     <string-array name="taskOptions">
         <item>Unassign Task</item>

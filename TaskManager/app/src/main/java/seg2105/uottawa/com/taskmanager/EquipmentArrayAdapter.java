@@ -33,11 +33,7 @@ public class EquipmentArrayAdapter extends ArrayAdapter<Item> {
 
         View rowView = inflater.inflate(R.layout.equipment_item_layout, parent, false);
         TextView recipeName = (TextView) rowView.findViewById(R.id.itemName);
-
-
         recipeName.setText(curEquipments.getItemName());
-
-
         return rowView;
     }
 }

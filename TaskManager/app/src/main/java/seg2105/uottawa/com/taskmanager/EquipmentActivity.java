@@ -4,8 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.ListView;
+import android.content.DialogInterface;
+import android.widget.TextView;
+import seg2105.uottawa.com.taskmanager.source.Item;
 
 /**
  * Created by milena_dionnne on 2017-11-22.
@@ -13,6 +17,8 @@ import android.widget.ListView;
 
 public class EquipmentActivity extends FragmentActivity {
     private ListView listView;
+    Intent intent = getIntent();
+
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -25,10 +31,34 @@ public class EquipmentActivity extends FragmentActivity {
     }
 
     public void btnShowDialog(View view){
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        AddEquipment addEquipment = new AddEquipment();
-        addEquipment.setDialogTitle("Enter equipment name");
-        addEquipment.show(fragmentManager, "Input Dialog");
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        final View dialogView = getLayoutInflater().inflate(R.layout.nav_equipment, null);
+        builder.setTitle(R.string.newEquipment);
+        builder.setView(dialogView);
+
+
+        builder.setPositiveButton(R.string.create, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                final TextView equipmentName = (TextView) dialogView.findViewById(R.id.txtEquipment);
+                //int equipmentIndex = intent.getIntExtra(EquipmentManager.intentIndexTitle, 0);
+                //final Item item = EquipmentManager.getInstance().getEquipmentAt(equipmentIndex);
+                Item item = new Item();
+                item.setItemName(equipmentName.getText().toString());
+                //finish();
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+
+            }
+        });
+
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent datEquipmenta) {
