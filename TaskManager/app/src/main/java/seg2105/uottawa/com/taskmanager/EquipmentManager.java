@@ -22,8 +22,8 @@ public class EquipmentManager {
         itemList = new ArrayList<>();
 
         for (int i = 0; i < values.length ; i++) {
-            Item newItem = new Item(values[i],"Task name: ");
-            itemList.add(newItem);
+            //Item newItem = new Item(values[i],"Task name: ");
+            //itemList.add(newItem);
         }
     }
 

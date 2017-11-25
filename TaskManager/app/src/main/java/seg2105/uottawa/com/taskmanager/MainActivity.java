@@ -17,6 +17,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -29,6 +30,7 @@ import android.support.design.widget.TabLayout;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -51,16 +53,30 @@ public class MainActivity extends AppCompatActivity
         //Puts Name of task and its description as Key/Value pairs
         HashMap<String, String> taskName = new HashMap<>();
 
-        List<String> equipmentList = new ArrayList<>();
-        equipmentList.add("Clean Pool");
-        equipmentList.add("Shopping");
-        equipmentList.add("Vacuum Living Room");
-        equipmentList.add("Wash Car");
-        equipmentList.add("Wash Dished");
+        final List<String[]> taskList = new LinkedList<String[]>();
+        taskList.add(new String []{"Shopping", "17 items in List"});
+        taskList.add(new String []{"Vaccum Living Room", "Deadline: Tonight - Unassigned"});
+        taskList.add(new String []{"Wash Car", "Note: Don't wash if it rains tonight"});
+        taskList.add(new String []{"Wash Dishes", "Repeat: Daily"});
+        taskList.add(new String []{"Call Veterinary", "Note: Urgent"});
 
-        ArrayAdapter<String> equipAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, equipmentList);
+        ArrayAdapter<String[]> adapter = new ArrayAdapter<String[]>(this, android.R.layout.simple_list_item_2, android.R.id.text1, taskList){
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent){
+                View view = super.getView(position, convertView, parent);
 
-        taskListView.setAdapter(equipAdapter);
+                String entry[] = taskList.get(position);
+                TextView text1 = (TextView) view.findViewById(android.R.id.text1);
+                TextView text2 = (TextView) view.findViewById(android.R.id.text2);
+                text1.setText(entry[0]);
+                text2.setText(entry[1]);
+
+                return view;
+            }
+
+        };
+
+        taskListView.setAdapter(adapter);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
