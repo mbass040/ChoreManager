@@ -30,17 +30,7 @@
                 android:paddingTop="10dp"
                 app:srcCompat="@android:drawable/ic_menu_add" />
 
-            <EditText
-                android:id="@+id/etNewTask"
-                android:layout_width="116dp"
-                android:layout_height="35dp"
-                android:layout_marginTop="5dp"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:text="New Task"
-                android:textSize="12sp"
-                tools:layout_editor_absoluteX="60dp"
-                tools:layout_editor_absoluteY="16dp" />
+
 
             <Switch
                 android:id="@+id/switch1"
@@ -53,6 +43,7 @@
                 android:paddingTop="15dp"
                 android:text="Only show my tasks"
                 android:textSize="12sp"
+                android:gravity="right"
                 tools:layout_editor_absoluteX="-7dp"
                 tools:layout_editor_absoluteY="-229dp" />
 

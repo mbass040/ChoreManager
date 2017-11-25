@@ -1,13 +1,12 @@
 package seg2105.uottawa.com.taskmanager;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
-import android.text.Html;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -21,10 +20,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
-import android.support.design.widget.TabLayout;
-
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -51,6 +47,7 @@ public class MainActivity extends AppCompatActivity
         //Puts Name of task and its description as Key/Value pairs
         HashMap<String, String> taskName = new HashMap<>();
 
+        // Populate the tasks list
         List<String> equipmentList = new ArrayList<>();
         equipmentList.add("Clean Pool");
         equipmentList.add("Shopping");
@@ -65,14 +62,6 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -145,12 +134,7 @@ public class MainActivity extends AppCompatActivity
 
         // Temporary for testing
         if (id == R.id.nav_open_task) {
-            Intent intent = new Intent(this, SpecificTaskActivity.class);
-
-            //Pass task's ID to the detail activity so that it can load the task's values
-            //intent.putExtra("taskID", -1);
-
-            startActivityForResult(intent, RESULT_OK);
+            viewTaskDetails(null);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -209,6 +193,35 @@ public class MainActivity extends AppCompatActivity
 
         alert.show();
     }
+
+    public void newTask(View view) {
+        // Use a builder to do initial dialog setup for us
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        // Use our custom layout for the dialog
+        View dialogView = getLayoutInflater().inflate(R.layout.new_task, null);
+        builder.setView(dialogView);
+        builder.setTitle(R.string.newTask);
+
+        // Add the Create/Cancel buttons to the dialog
+        builder.setPositiveButton(R.string.create, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                // TODO
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                // TODO
+            }
+        });
+
+        // Create & show the dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
     public void viewTaskDetails(View view) {
         Intent intent = new Intent(this, SpecificTaskActivity.class);
 
