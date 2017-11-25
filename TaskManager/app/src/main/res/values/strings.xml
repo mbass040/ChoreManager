@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TaskManager</string>
+    <string name="app_name">Tasks</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -20,16 +20,24 @@
     <string name="equipmentNeeded">Equipment Needed</string>
     <string name="notes">Notes</string>
     <string name="title_equipment_activity">Tools</string>
+    <string name="newEquipment">New Equipment</string>
+    <string name="newTask">New Task</string>
     <string name="create">Add</string>
     <string name="cancel">Cancel</string>
-    <string name="newEquipment">New Equipment</string>
-
-
+    <string name="title">Title:</string>
+    <string name="duration">Duration:</string>
+    <string name="deadline">Deadline:</string>
+    <string name="lblEquipment">Equipment:</string>
+    <string name="lblNotes">Notes:</string>
+    <string name="selectUser">Select a user</string>
+    <string name="grocerie">Grocerie</string>
+    <string name="material">Material</string>
     <string-array name="taskOptions">
         <item>Unassign Task</item>
         <item>Task Completed</item>
         <item>Postpone Task</item>
         <item>Delete Task</item>
     </string-array>
+    <string name="title_activity_shopping_list">Shopping List</string>
 
 </resources>

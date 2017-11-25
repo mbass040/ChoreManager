@@ -5,14 +5,13 @@ package seg2105.uottawa.com.taskmanager.source;
  */
 
 public class Item {
-    private String itemName = "Name Not Defined";
+    protected String itemName = "Name Not Defined";
 
     public Item() {
         itemName = "";
     }
 
     public Item(String name) {
-
         this.itemName = name;
     }
 

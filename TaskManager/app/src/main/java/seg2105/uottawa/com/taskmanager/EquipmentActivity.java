@@ -28,6 +28,8 @@ public class EquipmentActivity extends FragmentActivity {
 
         EquipmentArrayAdapter adapter = new EquipmentArrayAdapter(this, manager.getItemList());
         listView.setAdapter(adapter);
+
+
     }
 
     public void btnShowDialog(View view){
@@ -60,6 +62,8 @@ public class EquipmentActivity extends FragmentActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
+
+
 
     protected void onActivityResult(int requestCode, int resultCode, Intent datEquipmenta) {
         ListView listView = (ListView) findViewById(R.id.list);

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="30dp">
+
+
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+
+                <TextView
+                    android:id="@+id/lblTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/title"
+                    android:textAlignment="textEnd" />
+
+                <EditText
+                    android:id="@+id/txtTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="textPersonName"
+                    android:maxLength="50"
+                    android:textSize="14sp" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/lblDuration"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/textView5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/duration"
+                    android:textAlignment="textEnd" />
+
+                <EditText
+                    android:id="@+id/txtDuration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="textPersonName"
+                    android:textSize="14sp" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+
+                <TextView
+                    android:id="@+id/lblDeadline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/deadline"
+                    android:textAlignment="textEnd" />
+
+                <EditText
+                    android:id="@+id/txtDeadline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="textPersonName"
+                    android:textSize="14sp"/>
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+
+                <TextView
+                    android:id="@+id/lblEquipment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/lblEquipment"
+                    android:textAlignment="textEnd" />
+
+                <Spinner
+                    android:id="@+id/spnrEquipment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </TableRow>
+
+            <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/lblNotes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/lblNotes"
+                    android:textAlignment="textEnd" />
+
+                <EditText
+                    android:id="@+id/editText4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:lines="6"
+                    android:inputType="textMultiLine"
+                    android:textSize="14sp" />
+            </TableRow>
+        </TableLayout>
+    </LinearLayout>

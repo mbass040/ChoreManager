@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="seg2105.uottawa.com.taskmanager.MainActivity">
+    tools:context="seg2105.uottawa.com.taskmanager.source.ShoppingList">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -20,17 +20,17 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_main" />
+    <include layout="@layout/content_shopping_list" />
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fabNewTask"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/btnAddToCart"
+        android:layout_width="72dp"
+        android:layout_height="60dp"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        android:tint="@android:color/white"
-        app:backgroundTint="@android:color/holo_red_dark"
-        app:srcCompat="@android:drawable/ic_input_add"
-        android:onClick="newTask"/>
+        app:backgroundTint="@android:color/holo_orange_dark"
+        app:srcCompat="@android:drawable/ic_menu_add"
+        tools:layout_editor_absoluteX="296dp"
+        tools:layout_editor_absoluteY="491dp" />
 
 </android.support.design.widget.CoordinatorLayout>
