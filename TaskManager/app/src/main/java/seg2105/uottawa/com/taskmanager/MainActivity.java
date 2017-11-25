@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabNewTask);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -107,6 +107,34 @@ public class MainActivity extends AppCompatActivity
         btnSwitchUser = (Button)findViewById(R.id.btnSwitchUser);
 
 
+    }
+
+    public void newTask(View view){
+    // Use a builder to do initial dialog setup for us
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        // Use our custom layout for the dialog
+        View dialogView = getLayoutInflater().inflate(R.layout.new_task, null);
+        builder.setView(dialogView);
+        builder.setTitle(R.string.newTask);
+
+         // Add the Create/Cancel buttons to the dialog
+         builder.setPositiveButton(R.string.create, new DialogInterface.OnClickListener() {
+            @Override
+             public void onClick(DialogInterface dialogInterface, int i) {
+                                                // TODO
+             }
+         });
+         builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+             @Override
+             public void onClick(DialogInterface dialogInterface, int i) {
+                                // TODO
+             }
+         });
+
+        // Create & show the dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     @Override
