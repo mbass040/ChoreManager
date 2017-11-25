@@ -9,23 +9,25 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import seg2105.uottawa.com.taskmanager.source.Item;
+
 /**
  * Created by milena_dionnne on 2017-11-22.
  */
 
-public class EquipmentArrayAdapter extends ArrayAdapter<Equipment> {
+public class EquipmentArrayAdapter extends ArrayAdapter<Item> {
     private final Context context;
-    private final ArrayList<Equipment> equipments;
+    private final ArrayList<Item> items;
 
-    public EquipmentArrayAdapter(Context context, ArrayList<Equipment> values) {
+    public EquipmentArrayAdapter(Context context, ArrayList<Item> values) {
         super(context, R.layout.equipment_item_layout, values);
         this.context = context;
-        this.equipments = values;
+        this.items = values;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Equipment curEquipments = equipments.get(position);
+        Item curEquipments = items.get(position);
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -33,7 +35,7 @@ public class EquipmentArrayAdapter extends ArrayAdapter<Equipment> {
         TextView recipeName = (TextView) rowView.findViewById(R.id.itemName);
 
 
-        recipeName.setText(curEquipments.getEquipmentName());
+        recipeName.setText(curEquipments.getItemName());
 
 
         return rowView;

@@ -20,7 +20,7 @@ public class EquipmentActivity extends FragmentActivity {
         listView = (ListView) findViewById(R.id.list);
         EquipmentManager manager = EquipmentManager.getInstance();
 
-        EquipmentArrayAdapter adapter = new EquipmentArrayAdapter(this, manager.getEquipmentList());
+        EquipmentArrayAdapter adapter = new EquipmentArrayAdapter(this, manager.getItemList());
         listView.setAdapter(adapter);
     }
 
