@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -22,6 +22,7 @@
             tools:layout_editor_absoluteX="8dp"
             tools:layout_editor_absoluteY="8dp">
 
+            =======
             <QuickContactBadge
                 android:id="@+id/quickContactBadge2"
                 android:layout_width="58dp"
@@ -29,19 +30,6 @@
                 android:paddingBottom="10dp"
                 android:paddingTop="10dp"
                 app:srcCompat="@android:drawable/ic_menu_add" />
-
-            <EditText
-                android:id="@+id/etNewTask"
-                android:layout_width="116dp"
-                android:layout_height="35dp"
-                android:layout_marginTop="5dp"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:text="New Task"
-                android:textSize="12sp"
-                tools:layout_editor_absoluteX="60dp"
-                tools:layout_editor_absoluteY="16dp" />
-
             <Switch
                 android:id="@+id/switch1"
                 android:layout_width="match_parent"
@@ -53,6 +41,7 @@
                 android:paddingTop="15dp"
                 android:text="Only show my tasks"
                 android:textSize="12sp"
+                android:gravity="right"
                 tools:layout_editor_absoluteX="-7dp"
                 tools:layout_editor_absoluteY="-229dp" />
 
@@ -64,4 +53,4 @@
             android:layout_height="wrap_content" />
 
     </LinearLayout>
-</android.support.constraint.ConstraintLayout>
+</RelativeLayout>
