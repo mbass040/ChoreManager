@@ -32,7 +32,7 @@ public class TaskList extends AppCompatActivity {
         taskName.put("Call Veterinary", "Note: Urgent");
 
         List<HashMap<String, String>> listItems = new ArrayList<>();
-        SimpleAdapter adapter = new SimpleAdapter(this, listItems, R.layout.list_item, new String[]{"First Line", "Second Line"}, new int []{R.id.text1, R.id.text2});
+        SimpleAdapter adapter = new SimpleAdapter(this, listItems, R.layout.list_item, new String[]{"First Line", "Second Line"}, new int []{R.id.txt1, R.id.txt2});
 
         Iterator iter = taskName.entrySet().iterator();
         while(iter.hasNext()){

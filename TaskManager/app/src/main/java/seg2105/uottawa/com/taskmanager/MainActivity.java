@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -16,13 +17,24 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.support.design.widget.TabLayout;
 
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
 import seg2105.uottawa.com.taskmanager.source.Task;
+
+import static seg2105.uottawa.com.taskmanager.R.id.lvTaskList;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -33,6 +45,23 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        ListView taskListView = (ListView) findViewById(lvTaskList);
+
+        //Puts Name of task and its description as Key/Value pairs
+        HashMap<String, String> taskName = new HashMap<>();
+
+        List<String> equipmentList = new ArrayList<>();
+        equipmentList.add("Clean Pool");
+        equipmentList.add("Shopping");
+        equipmentList.add("Vacuum Living Room");
+        equipmentList.add("Wash Car");
+        equipmentList.add("Wash Dished");
+
+        ArrayAdapter<String> equipAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, equipmentList);
+
+        taskListView.setAdapter(equipAdapter);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
