@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -16,6 +17,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -49,29 +51,16 @@ public class MainActivity extends AppCompatActivity
         //Puts Name of task and its description as Key/Value pairs
         HashMap<String, String> taskName = new HashMap<>();
 
+        List<String> equipmentList = new ArrayList<>();
+        equipmentList.add("Clean Pool");
+        equipmentList.add("Shopping");
+        equipmentList.add("Vacuum Living Room");
+        equipmentList.add("Wash Car");
+        equipmentList.add("Wash Dished");
 
-        //hard-coded UI_MockUP examples, to be changed later on and become dynamic
-        taskName.put("Shopping", "17 items in List");
-        taskName.put("Vaccum Living Room", "Deadline: Tonight - Unassigned");
-        taskName.put("Wash Car", "Note: Don't wash if it rains tonight");
-        taskName.put("Wash Dishes", "Repeat: Daily");
-        taskName.put("Call Veterinary", "Note: Urgent");
+        ArrayAdapter<String> equipAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, equipmentList);
 
-        List<HashMap<String, String>> listItems = new ArrayList<>();
-        SimpleAdapter adapter = new SimpleAdapter(this, listItems, R.layout.list_item, new String[]{"First Line", "Second Line"}, new int []{R.id.txt1, R.id.txt2});
-
-        Iterator iter = taskName.entrySet().iterator();
-        while(iter.hasNext()){
-            HashMap<String, String> taskMap = new HashMap<>();
-            Map.Entry pair = (Map.Entry) iter.next();
-            //pairs "First line" string to the taskname value, and "Second line" string to the description value
-            taskMap.put("First line", pair.getKey().toString());
-            taskMap.put("Second line", pair.getValue().toString());
-            listItems.add(taskMap);
-        }
-
-        taskListView.setAdapter(adapter);
-
+        taskListView.setAdapter(equipAdapter);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
