@@ -1,9 +1,7 @@
 package seg2105.uottawa.com.taskmanager;
 
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
@@ -17,26 +15,58 @@ import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import seg2105.uottawa.com.taskmanager.source.Item;
 import seg2105.uottawa.com.taskmanager.source.Task;
+import seg2105.uottawa.com.taskmanager.source.User;
 
 public class SpecificTaskActivity extends AppCompatActivity {
 
     private Boolean isEditMode;
+    private TaskManagerDatabaseHandler db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_specific_task);
 
+        db = new TaskManagerDatabaseHandler(this);
+
         isEditMode = false;
 
         //Intent intent = getIntent();
-        Task task = new Task("Clean Pool");
 
-        setTitle(task.getName());
+        // Fetching the record of the specific task
+        Task task = db.getSpecificTask(1);
+
+        // Set title of activity to the task's name + its point value
+        setTitle(task.getName() + " (" + task.getPointValue() + " pt" + (task.getPointValue() == 1 ? "" : "s") + ")");
+
+
+        TextView lblDuration = (TextView) findViewById(R.id.lblTaskHowLong),
+                 lblTaskWhenToComplete = (TextView) findViewById(R.id.lblTaskWhenToComplete),
+                 lblTaskCreatorName = (TextView) findViewById(R.id.lblTaskCreatorName),
+                 tvNotes = (TextView) findViewById(R.id.tvNotes);
+
+        // Display duration label
+        lblDuration.setText(task.getHoursDuration() + " " + lblDuration.getText() + (task.getHoursDuration() == 1 ? "" : "s"));
+
+        // Display deadline label
+        lblTaskWhenToComplete.setText(task.getDeadline());
+
+        // TODO: Use Creator ID
+        //User creator = db.getUser(task.getCreatedBy());
+        //lblTaskCreatorName.setText(creator.getName());
+        lblTaskCreatorName.setText("Christopher Wallace");
+
+        // Display the task's notes
+        tvNotes.setText(task.getNotes());
+
+        List<Item> equipment = db.getTaskEquipment(task.getID());
 
         List<String> equipmentList = new ArrayList<>();
         equipmentList.add(Html.fromHtml("&#8226;") + " Pool Vacuum");

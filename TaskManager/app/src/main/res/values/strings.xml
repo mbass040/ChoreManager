@@ -30,8 +30,9 @@
     <string name="lblEquipment">Equipment:</string>
     <string name="lblNotes">Notes:</string>
     <string name="selectUser">Select a user</string>
-    <string name="grocerie">Grocerie</string>
+    <string name="grocerie">Grocery</string>
     <string name="material">Material</string>
+    <string name="hour">hour</string>
     <string-array name="taskOptions">
         <item>Unassign Task</item>
         <item>Task Completed</item>

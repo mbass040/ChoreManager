@@ -12,4 +12,12 @@ public class User {
         this.ID = ID;
         this.name = name;
     }
+
+    public int getID() {
+        return ID;
+    }
+
+    public String getName() {
+        return name;
+    }
 }

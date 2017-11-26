@@ -158,7 +158,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_weight="1"
-                        android:text="2 hours"
+                        android:text="@string/hour"
                         android:textSize="17sp" />
                 </LinearLayout>
 
@@ -230,7 +230,6 @@
                     android:id="@+id/lblTaskCreatorName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Christopher Wallace"
                     android:gravity="end"
                     android:textColor="@android:color/black"
                     android:textSize="18sp" />

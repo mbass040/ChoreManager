@@ -7,7 +7,7 @@ package seg2105.uottawa.com.taskmanager.source;
 public class Task {
     public enum TaskStatus { Completed, Assigned, Postponed, Unassigned };
 
-    private int ID, pointValue, assignedTo, createdBy;
+    private int ID, pointValue, assignedTo, createdBy, hoursDuration;
     private String name, notes, deadline;
     private TaskStatus status;
 
@@ -15,11 +15,12 @@ public class Task {
         this.name = name;
     }
 
-    public Task(int ID, String name, String notes, String deadline, int pointValue, TaskStatus status, int createdBy, int assignedTo) {
+    public Task(int ID, String name, String notes, String deadline, int hoursDuration, int pointValue, TaskStatus status, int createdBy, int assignedTo) {
         this.ID = ID;
         this.name = name;
         this.notes = notes;
         this.deadline = deadline;
+        this.hoursDuration = hoursDuration;
         this.pointValue = pointValue;
         this.assignedTo = assignedTo; // ID of the respective user
         this.createdBy = createdBy;   // ID of the respective user
@@ -60,5 +61,9 @@ public class Task {
 
     public TaskStatus getStatus() {
         return status;
+    }
+
+    public int getHoursDuration() {
+        return hoursDuration;
     }
 }
