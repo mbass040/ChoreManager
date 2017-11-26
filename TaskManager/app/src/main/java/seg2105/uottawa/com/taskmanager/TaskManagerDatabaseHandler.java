@@ -10,11 +10,18 @@ import android.database.Cursor;
 import java.util.ArrayList;
 import java.util.List;
 
+import seg2105.uottawa.com.taskmanager.source.CartItem;
+import seg2105.uottawa.com.taskmanager.source.Item;
+import seg2105.uottawa.com.taskmanager.source.Task;
+import seg2105.uottawa.com.taskmanager.source.User;
+
 /**
  * Created by Vincent on 11/19/2017.
  */
 
 public class TaskManagerDatabaseHandler extends SQLiteOpenHelper {
+    public enum DBItemType {Equipment, CartItem}
+
     // Database Version
     private static final int DATABASE_VERSION = 1;
     // Database Name
@@ -23,7 +30,6 @@ public class TaskManagerDatabaseHandler extends SQLiteOpenHelper {
     private static final String TABLE_USER = "users";
     private static final String TABLE_TASK = "task";
     private static final String TABLE_ITEM = "item";
-    private static final String TABLE_CART_ITEM = "cart_item";
     private static final String TABLE_TASK_EQUIPMENT = "task_equipment";
     private static final String TABLE_SHOPPING_CART = "shopping_cart";
 
@@ -38,13 +44,14 @@ public class TaskManagerDatabaseHandler extends SQLiteOpenHelper {
     private static final String TASK_DEADLINE = "task_deadline";
     private static final String TASK_POINT_VALUE = "task_point_value";
     private static final String TASK_STATUS = "task_status";
+    private static final String TASK_CREATED_BY = "task_created_by";
+    private static final String TASK_ASSIGNED_TO = "task_assigned_to";
 
     // Item Table Column Names
     private static final String ITEM_ID = "item_id";
     private static final String ITEM_NAME = "item_name";
 
-    // Cart Item Column Names
-    private static final String CART_ITEM_ID = "cart_item_id";
+    // Cart Item Column Name
     private static final String CART_ITEM_TYPE = "cart_item_type";
 
     // Task equipment Column Name
@@ -52,8 +59,6 @@ public class TaskManagerDatabaseHandler extends SQLiteOpenHelper {
 
     // Shopping cart Column Name
     private static final String SHOPPING_CART_ID = "shopping_cart_id";
-
-    List<String> userList = new ArrayList<String>();
 
     public TaskManagerDatabaseHandler(Context context){
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -68,23 +73,24 @@ public class TaskManagerDatabaseHandler extends SQLiteOpenHelper {
 
         // Item table create query
         String CREATE_ITEM_TABLE = "CREATE TABLE " + TABLE_ITEM + "("
-                + ITEM_ID + " INTEGER PRIMARY KEY,"
-                + CART_ITEM_ID + " INTEGER REFERENCE "
-                + TABLE_CART_ITEM + ", "
-                + ITEM_NAME + " TEXT)";
+                + ITEM_ID + " INTEGER PRIMARY KEY, "
+                + ITEM_NAME + " TEXT, "
+                + CART_ITEM_TYPE + " INTEGER)";
         db.execSQL(CREATE_ITEM_TABLE);
-
-        // Cart Item table create query
-        String CREATE_CART_ITEM_TABLE = "CREATE TABLE " + TABLE_CART_ITEM + "("
-                + CART_ITEM_ID + " INTEGER PRIMARY KEY,"
-                + ITEM_ID + " INTEGER REFERENCE "
-                + CART_ITEM_TYPE + " TEXT)";
-        db.execSQL(CREATE_CART_ITEM_TABLE);
 
         // Task table create query
         String CREATE_TASK_TABLE = "CREATE TABLE " + TABLE_TASK + "("
-                + TASK_ID + " INTEGER PRIMARY KEY," + TASK_NAME + " TEXT," + TASK_NOTES + " TEXT,"
-                + TASK_DEADLINE + " TEXT," + TASK_POINT_VALUE + " INTEGER," + TASK_STATUS + " TEXT)";
+                + TASK_ID + " INTEGER PRIMARY KEY,"
+                + TASK_NAME + " TEXT,"
+                + TASK_NOTES + " TEXT,"
+                + TASK_DEADLINE + " TEXT,"
+                + TASK_POINT_VALUE + " INTEGER, "
+                + TASK_STATUS + " INTEGER, "
+                + TASK_CREATED_BY + " INTEGER, "
+                + TASK_ASSIGNED_TO + " INTEGER, "
+                // Adding Foreign Key constraints
+                + "FOREIGN KEY(" + TASK_CREATED_BY + ") REFERENCES " + TABLE_USER + "(" + USER_ID + "), "
+                + "FOREIGN KEY(" + TASK_ASSIGNED_TO + ") REFERENCES " + TABLE_USER + "(" + USER_ID + "))";
         db.execSQL(CREATE_TASK_TABLE);
 
         // Task equipment table create query
@@ -104,7 +110,6 @@ public class TaskManagerDatabaseHandler extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_USER);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_ITEM);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_TASK);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CART_ITEM);
         //Create tables again
         onCreate(db);
     }
@@ -122,15 +127,101 @@ public class TaskManagerDatabaseHandler extends SQLiteOpenHelper {
     }
 
     //inserting a new Item to TABLE_ITEM
-    public void insertItem(String item){
+    public void insertItem(DBItemType dbType, String name, CartItem.ItemType type){
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues cvItem = new ContentValues();
-        cvItem.put(ITEM_NAME, item);
+        cvItem.put(ITEM_NAME, name);
+
+        // Only insert a value in the ITEM_TYPE column if this item is a CartItem; Equipment items don't have a specified type.
+        if (dbType == DBItemType.CartItem)
+            cvItem.put(CART_ITEM_TYPE, type.ordinal());
+        else
+            cvItem.putNull(CART_ITEM_TYPE);
 
         //inserting row
         db.insert(TABLE_ITEM, null, cvItem);
         db.close();
+    }
+
+    public List<Item> getEquipmentItems () {
+        // Only Equipment items have the ITEM_TYPE column as null
+        String query = "SELECT " + ITEM_ID + ", " + ITEM_NAME + " FROM " + TABLE_ITEM + " WHERE " + CART_ITEM_TYPE + " IS NULL";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursEquip = db.rawQuery(query, null);
+
+        List<Item> items = new ArrayList<>();
+
+        if (cursEquip.moveToFirst()) {
+            do {
+                Item item = new Item(cursEquip.getInt(0), cursEquip.getString(0));
+                items.add(item);
+            } while (cursEquip.moveToNext());
+        }
+
+        cursEquip.close();
+        db.close();
+        return items;
+    }
+
+    public void insertTask (String name, String notes, String deadline, int pointValue, Task.TaskStatus status, int createdBy) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues cvTask = new ContentValues();
+        cvTask.put(TASK_NAME, name);
+        cvTask.put(TASK_NOTES, notes);
+        cvTask.put(TASK_DEADLINE, deadline);
+        cvTask.put(TASK_POINT_VALUE, pointValue);
+        cvTask.put(TASK_STATUS, status.ordinal());
+        //cvTask.put(TASK_CREATED_BY, createdBy);
+        cvTask.putNull(TASK_ASSIGNED_TO); // Not assigned to anyone upon creation
+
+        //inserting row
+        db.insert(TABLE_TASK, null, cvTask);
+        db.close();
+    }
+
+    public List<Task> getTasks(boolean meOnly) {
+        String query = "SELECT * FROM " + TABLE_TASK + " WHERE " + TASK_STATUS + " <> 0";
+        //String query = "SELECT * FROM " + TABLE_TASK;
+
+        //if (meOnly)
+            // TODO: use current user for WHERE clause
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursTasks = db.rawQuery(query, null);
+
+        List<Task> tasks = new ArrayList<>();
+
+        if (cursTasks.moveToFirst()) {
+            do {
+                Task.TaskStatus status;
+
+                switch (cursTasks.getInt(5)) {
+                    case 0:
+                        status = Task.TaskStatus.Completed;
+                        break;
+                    case 1:
+                        status = Task.TaskStatus.Assigned;
+                        break;
+                    case 2:
+                        status = Task.TaskStatus.Postponed;
+                        break;
+                    default:
+                        status = Task.TaskStatus.Unassigned;
+                        break;
+                }
+
+                Task task = new Task(cursTasks.getInt(0), cursTasks.getString(1), cursTasks.getString(2), cursTasks.getString(3), cursTasks.getInt(4), status, cursTasks.getInt(6), cursTasks.getInt(7));
+                tasks.add(task);
+            } while (cursTasks.moveToNext());
+        }
+
+        cursTasks.close();
+        db.close();
+
+        return tasks;
     }
 
     //insert a new Cart Item to TABLE_CART_ITEM
@@ -143,6 +234,7 @@ public class TaskManagerDatabaseHandler extends SQLiteOpenHelper {
 
 
     public List<String> getAllUsers(){
+        List<String> userList = new ArrayList<>();
         //select all users
         String selectUser = "SELECT " + USER_NAME + " FROM " + TABLE_USER;
 

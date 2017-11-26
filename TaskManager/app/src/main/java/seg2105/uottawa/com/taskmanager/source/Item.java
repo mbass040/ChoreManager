@@ -5,13 +5,17 @@ package seg2105.uottawa.com.taskmanager.source;
  */
 
 public class Item {
+    private int ID = -1;
     protected String itemName = "Name Not Defined";
 
-    public Item() {
-        itemName = "";
-    }
+    public Item() { }
 
     public Item(String name) {
+        this.itemName = name;
+    }
+
+    public Item(int ID, String name) {
+        this.ID = ID;
         this.itemName = name;
     }
 
