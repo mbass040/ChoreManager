@@ -76,7 +76,9 @@ public class TaskManagerDatabaseHandler extends SQLiteOpenHelper {
 
         // Cart Item table create query
         String CREATE_CART_ITEM_TABLE = "CREATE TABLE " + TABLE_CART_ITEM + "("
-                + CART_ITEM_ID + " INTEGER PRIMARY KEY," + CART_ITEM_TYPE + " TEXT)";
+                + CART_ITEM_ID + " INTEGER PRIMARY KEY,"
+                + ITEM_ID + " INTEGER REFERENCE "
+                + CART_ITEM_TYPE + " TEXT)";
         db.execSQL(CREATE_CART_ITEM_TABLE);
 
         // Task table create query
@@ -130,6 +132,14 @@ public class TaskManagerDatabaseHandler extends SQLiteOpenHelper {
         db.insert(TABLE_ITEM, null, cvItem);
         db.close();
     }
+
+    //insert a new Cart Item to TABLE_CART_ITEM
+//    public void insertCartItem(String cartItemName, int itemType){
+//        SQLiteDatabase db = this.getWritableDatabase();
+//
+//        ContentValues cvCartItem = new ContentValues();
+//        cvCartItem.put(ITEM_NAME, cartItemName);
+//    }
 
 
     public List<String> getAllUsers(){
