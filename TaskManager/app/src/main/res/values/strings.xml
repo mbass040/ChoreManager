@@ -33,6 +33,8 @@
     <string name="grocerie">Grocery</string>
     <string name="material">Material</string>
     <string name="hour">hour</string>
+    <string name="points">Points:</string>
+
     <string-array name="taskOptions">
         <item>Unassign Task</item>
         <item>Task Completed</item>
