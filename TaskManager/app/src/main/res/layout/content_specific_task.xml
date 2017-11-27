@@ -300,7 +300,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
-            android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus quis purus tristique, congue sapien id, convallis augue. Duis tincidunt pulvinar ultrices. Nunc augue lorem, pretium at lacus et, dapibus fringilla orci. Etiam vel vestibulum mi. Aliquam pulvinar quam lorem, sit amet rhoncus metus tincidunt at."
             android:textColor="#444" />
 
         <EditText
@@ -310,7 +309,6 @@
             android:ems="10"
             android:inputType="textMultiLine"
             android:maxLength="250"
-            android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus quis purus tristique, congue sapien id, convallis augue. Duis tincidunt pulvinar ultrices. Nunc augue lorem, pretium at lacus et, dapibus fringilla orci. Etiam vel vestibulum mi. Aliquam pulvinar quam lorem, sit amet rhoncus metus tincidunt at."
             android:textSize="14sp"
             android:visibility="gone" />
 

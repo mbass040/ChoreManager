@@ -15,10 +15,6 @@ import seg2105.uottawa.com.taskmanager.source.Item;
 import seg2105.uottawa.com.taskmanager.source.Task;
 import seg2105.uottawa.com.taskmanager.source.User;
 
-/**
- * Created by Vincent on 11/19/2017.
- */
-
 public class TaskManagerDatabaseHandler extends SQLiteOpenHelper {
     public enum DBItemType {Equipment, CartItem}
 
@@ -166,7 +162,7 @@ public class TaskManagerDatabaseHandler extends SQLiteOpenHelper {
 
         if (cursEquip.moveToFirst()) {
             do {
-                Item item = new Item(cursEquip.getInt(0), cursEquip.getString(0));
+                Item item = new Item(cursEquip.getInt(0), cursEquip.getString(1));
                 items.add(item);
             } while (cursEquip.moveToNext());
         }
@@ -177,8 +173,41 @@ public class TaskManagerDatabaseHandler extends SQLiteOpenHelper {
         return items;
     }
 
+    public void insertTaskEquipment (int taskID, int equipmentID) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cvItem = new ContentValues();
+
+        cvItem.put(TASK_EQUIPMENT_TASK_ID, taskID);
+        cvItem.put(TASK_EQUIPMENT_EQUIPMENT_ID, equipmentID);
+
+        //inserting row into associative entity TaskEquipment
+        db.insert(TABLE_TASK_EQUIPMENT, null, cvItem);
+        db.close();
+    }
+
+    // Gets the equipment associated to a task only when the task IDs match
     public List<Item> getTaskEquipment (int taskID) {
-        List<Item> equipment = null; // TODO
+        String query = "SELECT " + ITEM_ID + ", " + ITEM_NAME + " FROM " + TABLE_ITEM
+                        + " WHERE " + ITEM_ID + " IN ( " +
+                                "SELECT " + TASK_EQUIPMENT_EQUIPMENT_ID + " FROM " + TABLE_TASK_EQUIPMENT
+                                + " WHERE " + TASK_EQUIPMENT_TASK_ID + " = " + taskID
+                        + " )";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursEquip = db.rawQuery(query, null);
+
+        List<Item> equipment = new ArrayList<>();
+
+        if (cursEquip.moveToFirst()) {
+            do {
+                Item item = new Item(cursEquip.getInt(0), cursEquip.getString(1));
+                equipment.add(item);
+            } while (cursEquip.moveToNext());
+        }
+
+        //closing connection
+        cursEquip.close();
+        db.close();
         return equipment;
     }
 

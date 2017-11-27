@@ -1,14 +1,9 @@
 package seg2105.uottawa.com.taskmanager;
 
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
-import android.text.Html;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -23,18 +18,13 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.support.design.widget.TabLayout;
 
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import seg2105.uottawa.com.taskmanager.source.ShoppingList;
 import seg2105.uottawa.com.taskmanager.source.Task;
@@ -62,11 +52,15 @@ public class MainActivity extends AppCompatActivity
         taskList.add(new String []{"Wash Car", "Note: Don't wash if it rains tonight"});
         taskList.add(new String []{"Wash Dishes", "Repeat: Daily"});
         taskList.add(new String []{"Call Veterinary", "Note: Urgent"});
-
-
+        
         TaskManagerDatabaseHandler db = new TaskManagerDatabaseHandler(this);
 
+        // Temporarily manually adding tasks
         db.insertTask("Shopping", "17 items in List", "today", 4, 5, Task.TaskStatus.Unassigned, 1);
+        db.insertItem(TaskManagerDatabaseHandler.DBItemType.Equipment, "Shovel", null);
+        db.insertItem(TaskManagerDatabaseHandler.DBItemType.Equipment, "Soap", null);
+        db.insertTaskEquipment(1,1);
+        db.insertTaskEquipment(1,2);
 
         //creates a simple listView with an Item and subitem to be able to give a task a name and a description
         ArrayAdapter<String[]> adapter = new ArrayAdapter<String[]>(this, android.R.layout.simple_list_item_2, android.R.id.text1, taskList){
@@ -82,7 +76,6 @@ public class MainActivity extends AppCompatActivity
 
                 return view;
             }
-
         };
 
         taskListView.setAdapter(adapter);
@@ -190,12 +183,7 @@ public class MainActivity extends AppCompatActivity
 
         // Temporary for testing
         if (id == R.id.nav_open_task) {
-            Intent intent = new Intent(this, SpecificTaskActivity.class);
-
-            //Pass task's ID to the detail activity so that it can load the task's values
-            //intent.putExtra("taskID", -1);
-
-            startActivityForResult(intent, RESULT_OK);
+            viewTaskDetails();
         }
         else if (id == R.id.nav_shop){
             Intent intent = new Intent(this, ShoppingList.class);
@@ -263,11 +251,11 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    public void viewTaskDetails(View view) {
+    public void viewTaskDetails() {
         Intent intent = new Intent(this, SpecificTaskActivity.class);
 
         //Pass task's ID to the detail activity so that it can load the task's values
-        //intent.putExtra("taskID", -1);
+        intent.putExtra("taskID", 1);
 
         startActivityForResult(intent, RESULT_OK);
     }

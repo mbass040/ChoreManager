@@ -1,9 +1,5 @@
 package seg2105.uottawa.com.taskmanager.source;
 
-/**
- * Created by milena_dionnne on 2017-11-22.
- */
-
 public class Item {
     private int ID = -1;
     protected String itemName = "Name Not Defined";

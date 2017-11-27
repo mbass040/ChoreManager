@@ -1,6 +1,7 @@
 package seg2105.uottawa.com.taskmanager;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -15,33 +16,32 @@ import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import seg2105.uottawa.com.taskmanager.source.Item;
 import seg2105.uottawa.com.taskmanager.source.Task;
-import seg2105.uottawa.com.taskmanager.source.User;
 
 public class SpecificTaskActivity extends AppCompatActivity {
 
     private Boolean isEditMode;
     private TaskManagerDatabaseHandler db;
+    private int currentTaskID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_specific_task);
 
-        db = new TaskManagerDatabaseHandler(this);
-
         isEditMode = false;
 
-        //Intent intent = getIntent();
+        db = new TaskManagerDatabaseHandler(this);
 
-        // Fetching the record of the specific task
-        Task task = db.getSpecificTask(1);
+        Intent intent = getIntent();
+        currentTaskID = intent.getIntExtra("taskID", -1);
+
+        // Fetch the record of the specific task using the taskID sent from the MainActivity
+        Task task = db.getSpecificTask(currentTaskID);
 
         // Set title of activity to the task's name + its point value
         setTitle(task.getName() + " (" + task.getPointValue() + " pt" + (task.getPointValue() == 1 ? "" : "s") + ")");
@@ -66,13 +66,15 @@ public class SpecificTaskActivity extends AppCompatActivity {
         // Display the task's notes
         tvNotes.setText(task.getNotes());
 
-        List<Item> equipment = db.getTaskEquipment(task.getID());
+        // Get all equipment items associated to this task
+        List<Item> equipment = db.getTaskEquipment(currentTaskID);
 
+        // Load the names into
         List<String> equipmentList = new ArrayList<>();
-        equipmentList.add(Html.fromHtml("&#8226;") + " Pool Vacuum");
-        equipmentList.add(Html.fromHtml("&#8226;") + " Chlorine");
-        equipmentList.add(Html.fromHtml("&#8226;") + " Sponge");
-        equipmentList.add(Html.fromHtml("&#8226;") + " Soap");
+
+        for (Item item : equipment) {
+            equipmentList.add(Html.fromHtml("&#8226;") + " " + item.getItemName());
+        }
 
         GridView gvTaskEquipment = (GridView) findViewById(R.id.gvEquipmentList);
 
@@ -86,8 +88,8 @@ public class SpecificTaskActivity extends AppCompatActivity {
     public void editTask(View view) {
         isEditMode = !isEditMode; // Toggle the current tracked view mode
 
-        LinearLayout lytHrsRead = (LinearLayout) findViewById(R.id.lytHrsRead);
-        LinearLayout lytHrsWrite = (LinearLayout) findViewById(R.id.lytHrsWrite),
+        LinearLayout lytHrsRead = (LinearLayout) findViewById(R.id.lytHrsRead),
+                lytHrsWrite = (LinearLayout) findViewById(R.id.lytHrsWrite),
 
                 lytCompDateRead = (LinearLayout) findViewById(R.id.lytDateRead),
                 lytCompDateWrite = (LinearLayout) findViewById(R.id.lytDateWrite);
@@ -119,11 +121,12 @@ public class SpecificTaskActivity extends AppCompatActivity {
         }
         else {
             // TODO: save changes to DB
-            editTaskReadOnly(view);
+            editTaskToReadOnly(view);
         }
     }
 
-    public void editTaskReadOnly(View view) {
+    public void editTaskToReadOnly(View view) {
+        // Get the various layouts
         LinearLayout lytHrsRead = (LinearLayout) findViewById(R.id.lytHrsRead),
         lytHrsWrite = (LinearLayout) findViewById(R.id.lytHrsWrite),
 
@@ -138,6 +141,7 @@ public class SpecificTaskActivity extends AppCompatActivity {
 
         Button btnAddEquipment = (Button) findViewById(R.id.btnAddEquipment);
 
+        // Display only editable regions
         fabEdit.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(android.R.color.holo_red_dark)));
         fabCancel.setVisibility(View.GONE);
 
