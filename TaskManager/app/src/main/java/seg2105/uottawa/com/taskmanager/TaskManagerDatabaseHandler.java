@@ -189,9 +189,10 @@ public class TaskManagerDatabaseHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         // Delete a task equipment where the taskID and equipmentID match its respective argument.
-        db.delete(TABLE_TASK_EQUIPMENT, TASK_EQUIPMENT_TASK_ID + " = " + taskID + " AND " + TASK_EQUIPMENT_EQUIPMENT_ID + " = " + equipmentID, null);
+        db.delete(TABLE_TASK_EQUIPMENT, TASK_EQUIPMENT_TASK_ID + " = '" + taskID + "' AND " + TASK_EQUIPMENT_EQUIPMENT_ID + " = '" + equipmentID + "'", null);
         db.close();
     }
+
 
     // Gets the equipment associated to a task only when the task IDs match
     public List<Item> getTaskEquipment (int taskID) {

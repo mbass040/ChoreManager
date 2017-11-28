@@ -24,4 +24,7 @@ public class Item {
          itemName = newName;
     }
 
+    public int getID() {
+        return ID;
+    }
 }

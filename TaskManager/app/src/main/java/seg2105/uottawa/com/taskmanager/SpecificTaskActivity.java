@@ -1,5 +1,6 @@
 package seg2105.uottawa.com.taskmanager;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -9,6 +10,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -44,6 +46,7 @@ public class SpecificTaskActivity extends AppCompatActivity {
 
         setToReadOnly(null);
     }
+
 
     public void editTask(View view) {
         isEditMode = !isEditMode; // Toggle the current tracked view mode
@@ -95,6 +98,23 @@ public class SpecificTaskActivity extends AppCompatActivity {
             txtCompDate.setText(String.valueOf(currentTask.getDeadline()));
             txtPoints.setText(String.valueOf(currentTask.getPointValue()));
 
+            GridView gvEquipmentList = (GridView) findViewById(R.id.gvEquipmentList);
+            updateTaskEquipmentGridView(this);
+
+            gvEquipmentList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int position, long equipID) {
+                    int id = view.getId();
+
+                    if (id == R.id.btnDeleteTaskEquip) {
+                        db.deleteTaskEquipment(currentTaskID, (int)equipID);
+
+                        // Refresh view after deleting an equipment from this task
+                        updateTaskEquipmentGridView(view.getContext());
+                    }
+                }
+            });
+
             fabEdit.setImageDrawable(getResources().getDrawable(R.drawable.ic_check));
         }
         else {
@@ -104,6 +124,14 @@ public class SpecificTaskActivity extends AppCompatActivity {
             // Set & refresh the view to use most recent data & make read-only
             setToReadOnly(view);
         }
+    }
+
+    private void updateTaskEquipmentGridView (Context ctx) {
+        GridView gvEquipmentList = (GridView) findViewById(R.id.gvEquipmentList);
+        List<String[]> equipmentList = getEquipAsBasicMap();
+
+        TaskEquipmentAdapter adapter = new TaskEquipmentAdapter(ctx, (ArrayList<String[]>) equipmentList);
+        gvEquipmentList.setAdapter(adapter);
     }
 
     public void setToReadOnly(View view) {
@@ -172,15 +200,7 @@ public class SpecificTaskActivity extends AppCompatActivity {
         // Display the task's notes
         tvNotes.setText(currentTask.getNotes());
 
-        // Get all equipment items associated to this task
-        List<Item> equipment = db.getTaskEquipment(currentTask.getID());
-
-        // Load the names into
-        List<String> equipmentList = new ArrayList<>();
-
-        for (Item item : equipment) {
-            equipmentList.add(Html.fromHtml("&#8226;") + " " + item.getItemName());
-        }
+        List<String> equipmentList = getEquipAsStringList();
 
         GridView gvTaskEquipment = (GridView) findViewById(R.id.gvEquipmentList);
 
@@ -189,6 +209,33 @@ public class SpecificTaskActivity extends AppCompatActivity {
 
         // Show the list items in the grid
         gvTaskEquipment.setAdapter(equipAdapter);
+    }
+
+    private List<String[]> getEquipAsBasicMap () {
+        List<Item> equipment = db.getTaskEquipment(currentTaskID);
+
+        // Load the names into
+        List<String[]> equipmentList = new ArrayList<>();
+
+        for (Item item : equipment) {
+            equipmentList.add(new String[] {String.valueOf(item.getID()), item.getItemName()});
+        }
+
+        return equipmentList;
+    }
+
+    private List<String> getEquipAsStringList () {
+        // Get all equipment items associated to this task
+        List<Item> equipment = db.getTaskEquipment(currentTaskID);
+
+        // Load the names into
+        List<String> equipmentList = new ArrayList<>();
+
+        for (Item item : equipment) {
+            equipmentList.add(Html.fromHtml("&#8226;") + " " + item.getItemName());
+        }
+
+        return equipmentList;
     }
 
     public void showMoreTaskOptions(View view) {
