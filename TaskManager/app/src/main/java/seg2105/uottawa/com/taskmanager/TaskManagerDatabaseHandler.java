@@ -185,6 +185,14 @@ public class TaskManagerDatabaseHandler extends SQLiteOpenHelper {
         db.close();
     }
 
+    public void deleteTaskEquipment (int taskID, int equipmentID) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // Delete a task equipment where the taskID and equipmentID match its respective argument.
+        db.delete(TABLE_TASK_EQUIPMENT, TASK_EQUIPMENT_TASK_ID + " = " + taskID + " AND " + TASK_EQUIPMENT_EQUIPMENT_ID + " = " + equipmentID, null);
+        db.close();
+    }
+
     // Gets the equipment associated to a task only when the task IDs match
     public List<Item> getTaskEquipment (int taskID) {
         String query = "SELECT " + ITEM_ID + ", " + ITEM_NAME + " FROM " + TABLE_ITEM
@@ -229,9 +237,22 @@ public class TaskManagerDatabaseHandler extends SQLiteOpenHelper {
         db.close();
     }
 
+    public void updateTask (int ID, String notes, String deadline, int hoursDuration, int pointValue) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues cvTask = new ContentValues();
+        cvTask.put(TASK_NOTES, notes);
+        cvTask.put(TASK_DEADLINE, deadline);
+        cvTask.put(TASK_DURATION, hoursDuration);
+        cvTask.put(TASK_POINT_VALUE, pointValue);
+
+        db.update(TABLE_TASK, cvTask, TASK_ID + " = " + ID, null);
+        db.close();
+    }
+
     public List<Task> getTasks(boolean meOnly) {
+        // Get tasks that are not 'Completed'
         String query = "SELECT * FROM " + TABLE_TASK + " WHERE " + TASK_STATUS + " <> 0";
-        //String query = "SELECT * FROM " + TABLE_TASK;
 
         //if (meOnly)
             // TODO: use current user for WHERE clause
