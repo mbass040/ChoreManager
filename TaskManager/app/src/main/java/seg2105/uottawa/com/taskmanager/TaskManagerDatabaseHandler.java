@@ -151,39 +151,56 @@ public class TaskManagerDatabaseHandler extends SQLiteOpenHelper {
         db.close();
     }
 
-    public List<Item> getEquipmentItems () {
+    public List<Item> getItems (boolean isEquipment) {
         // Only Equipment items have the ITEM_TYPE column as null
-        String query = "SELECT " + ITEM_ID + ", " + ITEM_NAME + " FROM " + TABLE_ITEM + " WHERE " + CART_ITEM_TYPE + " IS NULL";
+        String query = "SELECT " + ITEM_ID + ", " + ITEM_NAME + " FROM " + TABLE_ITEM
+                + " WHERE " + CART_ITEM_TYPE + " IS" + (!isEquipment ? " NOT" : "") + " NULL";
 
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursEquip = db.rawQuery(query, null);
+        Cursor cursItem = db.rawQuery(query, null);
 
         List<Item> items = new ArrayList<>();
 
-        if (cursEquip.moveToFirst()) {
+        if (cursItem.moveToFirst()) {
             do {
-                Item item = new Item(cursEquip.getInt(0), cursEquip.getString(1));
+                Item item = new Item(cursItem.getInt(0), cursItem.getString(1));
                 items.add(item);
-            } while (cursEquip.moveToNext());
+            } while (cursItem.moveToNext());
         }
 
         //closing connection
-        cursEquip.close();
+        cursItem.close();
         db.close();
         return items;
     }
 
     public void insertTaskEquipment (int taskID, int equipmentID) {
         SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues cvItem = new ContentValues();
+        ContentValues cvTaskEquipment = new ContentValues();
 
-        cvItem.put(TASK_EQUIPMENT_TASK_ID, taskID);
-        cvItem.put(TASK_EQUIPMENT_EQUIPMENT_ID, equipmentID);
+        cvTaskEquipment.put(TASK_EQUIPMENT_TASK_ID, taskID);
+        cvTaskEquipment.put(TASK_EQUIPMENT_EQUIPMENT_ID, equipmentID);
 
         //inserting row into associative entity TaskEquipment
-        db.insert(TABLE_TASK_EQUIPMENT, null, cvItem);
+        db.insert(TABLE_TASK_EQUIPMENT, null, cvTaskEquipment);
         db.close();
     }
+    public void insertItem(CartItem.ItemType itemType, String itemName){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cvItem = new ContentValues();
+
+        cvItem.put(ITEM_NAME, itemName);
+        // the itemType parameter is used only for CartItem objects, so if we're inserting an equipment
+        // the CART_ITEM_TYPE column will be null.
+        if(itemType == null){
+            cvItem.putNull(CART_ITEM_TYPE);
+        }else{
+            cvItem.put(CART_ITEM_TYPE, itemType.ordinal());
+        }
+        db.insert(TABLE_ITEM, null, cvItem);
+        db.close();
+
+    }//insertItem
 
     public void deleteTaskEquipment (int taskID, int equipmentID) {
         SQLiteDatabase db = this.getWritableDatabase();
