@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity
     List<String>  userList = new ArrayList<String>();
     List<String[]> taskList = new LinkedList<String[]>();
     private int currentUserID;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -190,18 +191,18 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 EditText txtName = (EditText) dialogView.findViewById(R.id.txtTitle);
-                txtName.getText();
+                String name = txtName.getText().toString();
                 EditText txtNotes = (EditText) dialogView.findViewById(R.id.txtNotes);
-                txtNotes.getText();
+                String note = txtNotes.getText().toString();
                 EditText txtDeadLine = (EditText) dialogView.findViewById(R.id.txtDeadline);
-                txtDeadLine.getText();
+                String deadline = txtDeadLine.getText().toString();
                 EditText txtDuration = (EditText) dialogView.findViewById(R.id.txtDuration);
-                txtDuration.getText();
+                Integer duration = Integer.valueOf(txtDuration.getText().toString());
                 EditText txtEquipment = (EditText) dialogView.findViewById(R.id.txtEquipment);
-                txtEquipment.getText();
+                String equipment = txtEquipment.getText().toString();
                 EditText txtPoints = (EditText) dialogView.findViewById(R.id.txtPoints);
-                txtPoints.getText();
-                //taskList = tmDB.insertTask(txtName,txtNotes, txtDuration, txtPoints, Task.TaskStatus.Unassigned, userList.);
+                Integer points = Integer.valueOf(txtPoints.getText().toString());
+                tmDB.insertTask(name, note, deadline, duration, points, Task.TaskStatus.Unassigned, 1);
             }
         });
         builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
