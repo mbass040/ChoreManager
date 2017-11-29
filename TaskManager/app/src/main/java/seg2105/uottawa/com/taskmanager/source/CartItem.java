@@ -5,18 +5,19 @@ package seg2105.uottawa.com.taskmanager.source;
  */
 
 public class CartItem extends Item {
-   public enum ItemType {Material, Grocery}
-   private ItemType material;
+   public enum ItemType {Grocery, Material}
+   private  int id;
+   private ItemType type;
 
-   public CartItem(String name, ItemType material){
-      this.material = material;
+   public CartItem(int id,String name, ItemType type){
+      this.type = type;
       itemName = name;
+      this.id = id;
    }
     public ItemType getIsAMaterial(){
-      return material;
+      return type;
     }
-    public void setIsAMaterial(ItemType material){
-       material = material;
+    public void setIsAMaterial(ItemType material){type= material;
     }
 
 }

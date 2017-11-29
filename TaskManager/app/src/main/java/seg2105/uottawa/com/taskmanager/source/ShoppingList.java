@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import seg2105.uottawa.com.taskmanager.R;
+import seg2105.uottawa.com.taskmanager.TaskManagerDatabaseHandler;
 
 public class ShoppingList extends AppCompatActivity {
 
@@ -31,6 +32,9 @@ public class ShoppingList extends AppCompatActivity {
 
     //type of list
     private int type;
+
+    //database
+    private TaskManagerDatabaseHandler db;
 
 
     @Override
@@ -47,9 +51,10 @@ public class ShoppingList extends AppCompatActivity {
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        //initiate both list
+        //initiate both list and database
         groceryList = new ArrayList<String>();
         materialList = new ArrayList<String>();
+        db = new TaskManagerDatabaseHandler(this);
 
         //get the ListView
         ListView lvGrocery = (ListView) findViewById(R.id.lvGrocerie);
@@ -59,9 +64,6 @@ public class ShoppingList extends AppCompatActivity {
         groceryAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, groceryList);
         materialAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, materialList);
 
-        //set the adapter
-        lvGrocery.setAdapter(groceryAdapter);
-        lvMaterial.setAdapter(materialAdapter);
 
         //set the long click listener of grocery
         lvGrocery.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -83,6 +85,24 @@ public class ShoppingList extends AppCompatActivity {
             }
         });
 
+        //get value from the database
+        List<Item> list = db.getItems(false);
+        CartItem cartItem;
+        CartItem.ItemType type;
+        while(!list.isEmpty()){
+            cartItem =(CartItem) list.remove(0);
+            type = cartItem.getIsAMaterial();
+            if(type == CartItem.ItemType.Grocery){
+                populatedList(cartItem.getItemName(),0);
+            }else{
+                populatedList(cartItem.getItemName(),1);
+            }
+        }
+
+        //set the adapter
+        lvGrocery.setAdapter(groceryAdapter);
+        lvMaterial.setAdapter(materialAdapter);
+
     }
     public void addDialog(View view){
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -97,6 +117,9 @@ public class ShoppingList extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 add(text.getText().toString(),spinner.getSelectedItemPosition());
+                Toast.makeText(ShoppingList.this,"Item added",Toast.LENGTH_SHORT).show();
+                materialAdapter.notifyDataSetChanged();
+                groceryAdapter.notifyDataSetChanged();
             }
         });
         builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -147,12 +170,17 @@ public class ShoppingList extends AppCompatActivity {
     private void add(String item,int type){
         if(type == 1){
             materialList.add(item);
-            materialAdapter.notifyDataSetChanged();
-
+            db.insertItem(TaskManagerDatabaseHandler.DBItemType.CartItem,item,CartItem.ItemType.Material);
         }else{
             groceryList.add(item);
-            groceryAdapter.notifyDataSetChanged();
+            db.insertItem(TaskManagerDatabaseHandler.DBItemType.CartItem,item,CartItem.ItemType.Grocery);
         }
-        Toast.makeText(this,"Item added",Toast.LENGTH_SHORT).show();
+    }
+    private void populatedList(String item,int type){
+        if(type == 1){
+            materialList.add(item);
+        }else{
+            groceryList.add(item);
+        }
     }
 }
