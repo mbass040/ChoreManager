@@ -17,7 +17,8 @@ import seg2105.uottawa.com.taskmanager.source.Item;
 
 public class EquipmentActivity extends FragmentActivity {
     private ListView listView;
-    Intent intent = getIntent();
+    private Intent intent;
+    private TaskManagerDatabaseHandler db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -26,6 +27,8 @@ public class EquipmentActivity extends FragmentActivity {
         listView = (ListView) findViewById(R.id.list);
         EquipmentManager manager = EquipmentManager.getInstance();
 
+        intent = getIntent();
+        db = new TaskManagerDatabaseHandler(this);
         EquipmentArrayAdapter adapter = new EquipmentArrayAdapter(this, manager.getItemList());
         listView.setAdapter(adapter);
 
@@ -48,13 +51,14 @@ public class EquipmentActivity extends FragmentActivity {
                 Item item = new Item();
                 item.setItemName(equipmentName.getText().toString());
                 //finish();
+                db.getItems(true);
             }
         });
         builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 
-
+                dialogInterface.dismiss();
             }
         });
 

@@ -11,13 +11,14 @@ import seg2105.uottawa.com.taskmanager.source.Item;
 public class EquipmentManager {
     private static EquipmentManager instance = null;
     private ArrayList<Item> itemList;
-    public static final String intentIndexTitle = "selectedEquipment";
+
+
 
     protected EquipmentManager() {
         //This Exists to defeat instantiation
 
         String[] values = new String[]{
-                "Soap", "Towel", "Windex", "Comet", "Rope", "", "empty", "empty", "empty", "Last Supper"
+                "Soap", "Towel", "Windex", "Comet", "Rope", "", "empty", "empty", "empty"
         };
 
         itemList = new ArrayList<>();
@@ -25,6 +26,7 @@ public class EquipmentManager {
         for (int i = 0; i < values.length ; i++) {
             Item newItem = new Item(values[i]);
             itemList.add(newItem);
+
         }
     }
 
