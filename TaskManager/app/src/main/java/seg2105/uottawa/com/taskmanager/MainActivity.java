@@ -21,6 +21,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity
     private Button btnSwitchUser;
     private TaskManagerDatabaseHandler tmDB;
     private String newName = "";
+    public AlertDialog alertDialog;
     List<String>  userList = new ArrayList<String>();
     List<String[]> taskList = new LinkedList<String[]>();
 
@@ -58,14 +60,14 @@ public class MainActivity extends AppCompatActivity
         taskList.add(new String []{"Wash Dishes", "Repeat: Daily"});
         taskList.add(new String []{"Call Veterinary", "Note: Urgent"});
         
-        TaskManagerDatabaseHandler db = new TaskManagerDatabaseHandler(this);
+        //TaskManagerDatabaseHandler db = new TaskManagerDatabaseHandler(this);
 
         // Temporarily manually adding tasks
-        db.insertTask("Shopping", "17 items in List", "today", 4, 5, Task.TaskStatus.Unassigned, 1);
-        db.insertItem(TaskManagerDatabaseHandler.DBItemType.Equipment, "Shovel", null);
-        db.insertItem(TaskManagerDatabaseHandler.DBItemType.Equipment, "Soap", null);
-        db.insertTaskEquipment(1,1);
-        db.insertTaskEquipment(1,2);
+        tmDB.insertTask("Shopping", "17 items in List", "today", 4, 5, Task.TaskStatus.Unassigned, 1);
+        tmDB.insertItem(TaskManagerDatabaseHandler.DBItemType.Equipment, "Shovel", null);
+        tmDB.insertItem(TaskManagerDatabaseHandler.DBItemType.Equipment, "Soap", null);
+        tmDB.insertTaskEquipment(1,1);
+        tmDB.insertTaskEquipment(1,2);
 
         //creates a simple listView with an Item and subitem to be able to give a task a name and a description
         ArrayAdapter<String[]> adapter = new ArrayAdapter<String[]>(this, android.R.layout.simple_list_item_2, android.R.id.text1, taskList){
@@ -145,19 +147,8 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_broom) {
             Intent intent = new Intent(getApplicationContext(),EquipmentActivity.class);
-            startActivityForResult(intent,0);
 
-//            // Handle the camera action
-//        } else if (id == R.id.nav_gallery) {
-//
-//        } else if (id == R.id.nav_slideshow) {
-//
-//        } else if (id == R.id.nav_manage) {
-//
-//        } else if (id == R.id.nav_share) {
-//
-//        } else if (id == R.id.nav_send) {
-//
+            startActivityForResult(intent,0);
         }
 
         // Temporary for testing
@@ -167,6 +158,8 @@ public class MainActivity extends AppCompatActivity
         else if (id == R.id.nav_shop){
             Intent intent = new Intent(this, ShoppingList.class);
             startActivityForResult(intent,RESULT_OK);
+        }else if(id == R.id.nav_backlog){
+            Toast.makeText(getApplicationContext(), "Backlog not yet implemented", Toast.LENGTH_LONG).show();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -235,7 +228,11 @@ public class MainActivity extends AppCompatActivity
         lvUser.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                txtName.setText(userList.get(position));
+                String name = userList.get(position);
+                int userID;
+                userID = tmDB.getUserId(name);
+                txtName.setText(name);
+                alertDialog.dismiss();
             }
         });
         builder.setPositiveButton("New User", new DialogInterface.OnClickListener() {
@@ -246,7 +243,8 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        builder.show();
+        alertDialog = builder.create();
+        alertDialog.show();
 
 
     }
