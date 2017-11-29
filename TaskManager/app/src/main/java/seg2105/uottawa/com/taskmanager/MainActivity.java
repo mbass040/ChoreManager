@@ -45,8 +45,7 @@ public class MainActivity extends AppCompatActivity
     public AlertDialog alertDialog;
     List<String>  userList = new ArrayList<String>();
     List<String[]> taskList = new LinkedList<String[]>();
-    private int currentUserID;
-
+    private int currentUserID, totalPoints;// global variable that keeps track of the userID and total points
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -233,11 +232,11 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String name = userList.get(position);
-                int userID;
-                userID = tmDB.getUserId(name);
-                currentUserID = userID;
+                currentUserID = tmDB.getUserId(name);
+                totalPoints = tmDB.getTotalPointForUser(currentUserID);
+
                 txtName.setText(name);
-                Toast.makeText(getApplicationContext(), "ID is " + currentUserID, Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "ID is " + currentUserID + " and points is " + totalPoints, Toast.LENGTH_LONG).show();
                 alertDialog.dismiss();
             }
         });

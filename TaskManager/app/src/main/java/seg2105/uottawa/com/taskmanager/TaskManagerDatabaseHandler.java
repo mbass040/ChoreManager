@@ -111,14 +111,7 @@ public class TaskManagerDatabaseHandler extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion){
-        // Drop older table if exist
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_TASK_EQUIPMENT);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_ITEM);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_TASK);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_SHOPPING_CART);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_USER);
-        //Create tables again
-        onCreate(db);
+
     }
 
     //inserting a new user to TABLE_USER
