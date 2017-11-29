@@ -163,7 +163,19 @@ public class TaskManagerDatabaseHandler extends SQLiteOpenHelper {
 
         if (cursItem.moveToFirst()) {
             do {
-                Item item = new Item(cursItem.getInt(0), cursItem.getString(1));
+                Item item;
+                if (!isEquipment) { // AKA if we only want cart items
+                    CartItem.ItemType type;
+                    if (cursItem.getInt(2) == 0)
+                            type = CartItem.ItemType.Grocery;
+                    else
+                        type = CartItem.ItemType.Material;
+
+                    item = new CartItem(cursItem.getInt(0), cursItem.getString(1), type);
+                }
+                else
+                    item = new Item(cursItem.getInt(0), cursItem.getString(1));
+
                 items.add(item);
             } while (cursItem.moveToNext());
         }
@@ -394,5 +406,36 @@ public class TaskManagerDatabaseHandler extends SQLiteOpenHelper {
         db.close();
 
         return user;
+    }//getUser
+
+    public int getUserId(String userName){
+        String query = "SELECT " + USER_ID
+                + " FROM " + TABLE_USER
+                + " WHERE " + USER_NAME + " = '" + userName +"'";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursUserID = db.rawQuery(query, null);
+        int id = 0;
+        if(cursUserID.moveToFirst())
+            id = cursUserID.getInt(0);
+
+        cursUserID.close();
+        db.close();
+        return id;
+    }
+    //sums the points together and returns it
+    public int getTotalPointForUser(int userID){
+        String query = "SELECT SUM(" + TASK_POINT_VALUE + ") FROM " + TABLE_TASK + " WHERE " + USER_ID + " = " + userID;
+        int total = 0;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursTotal = db.rawQuery(query, null);
+
+        if(cursTotal.moveToFirst())
+            total = cursTotal.getInt(0);
+
+        cursTotal.close();
+        db.close();
+
+        return total;
     }
 }

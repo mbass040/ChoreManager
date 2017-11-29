@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import seg2105.uottawa.com.taskmanager.R;
+import seg2105.uottawa.com.taskmanager.TaskManagerDatabaseHandler;
 
 public class ShoppingList extends AppCompatActivity {
 
@@ -31,6 +32,9 @@ public class ShoppingList extends AppCompatActivity {
 
     //type of list
     private int type;
+
+    //database
+    private TaskManagerDatabaseHandler db;
 
 
     @Override
@@ -47,9 +51,10 @@ public class ShoppingList extends AppCompatActivity {
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        //initiate both list
+        //initiate both list and database
         groceryList = new ArrayList<String>();
         materialList = new ArrayList<String>();
+        db = new TaskManagerDatabaseHandler(this);
 
         //get the ListView
         ListView lvGrocery = (ListView) findViewById(R.id.lvGrocerie);
@@ -82,6 +87,20 @@ public class ShoppingList extends AppCompatActivity {
                 return true;
             }
         });
+
+        //get value from the database
+        List<Item> list = db.getItems(false);
+        CartItem cartItem;
+        CartItem.ItemType type;
+        while(!list.isEmpty()){
+            cartItem =(CartItem) list.remove(0);
+            type = cartItem.getIsAMaterial();
+            if(type == CartItem.ItemType.Grocery){
+                add(cartItem.getItemName(),0);
+            }else{
+                add(cartItem.getItemName(),1);
+            }
+        }
 
     }
     public void addDialog(View view){
@@ -148,11 +167,14 @@ public class ShoppingList extends AppCompatActivity {
         if(type == 1){
             materialList.add(item);
             materialAdapter.notifyDataSetChanged();
+            db.insertItem(TaskManagerDatabaseHandler.DBItemType.CartItem,item,CartItem.ItemType.Material);
 
         }else{
             groceryList.add(item);
             groceryAdapter.notifyDataSetChanged();
+            db.insertItem(TaskManagerDatabaseHandler.DBItemType.CartItem,item,CartItem.ItemType.Grocery);
         }
+
         Toast.makeText(this,"Item added",Toast.LENGTH_SHORT).show();
     }
 }
