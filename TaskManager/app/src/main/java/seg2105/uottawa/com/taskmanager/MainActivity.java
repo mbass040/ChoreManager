@@ -19,7 +19,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Switch;
 import android.widget.TextView;
+
 
 
 import java.util.ArrayList;
@@ -28,6 +30,7 @@ import java.util.List;
 
 import seg2105.uottawa.com.taskmanager.source.ShoppingList;
 import seg2105.uottawa.com.taskmanager.source.Task;
+
 
 import static seg2105.uottawa.com.taskmanager.R.id.lvTaskList;
 
@@ -39,6 +42,8 @@ public class MainActivity extends AppCompatActivity
     private TaskManagerDatabaseHandler tmDB;
     private String newName = "";
     List<String>  userList = new ArrayList<String>();
+    List<String[]> taskList = new LinkedList<String[]>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,33 +103,7 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    public void newTask(View view){
-    // Use a builder to do initial dialog setup for us
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-        // Use our custom layout for the dialog
-        View dialogView = getLayoutInflater().inflate(R.layout.new_task, null);
-        builder.setView(dialogView);
-        builder.setTitle(R.string.newTask);
-
-         // Add the Create/Cancel buttons to the dialog
-         builder.setPositiveButton(R.string.create, new DialogInterface.OnClickListener() {
-            @Override
-             public void onClick(DialogInterface dialogInterface, int i) {
-                // TODO
-             }
-         });
-         builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-             @Override
-             public void onClick(DialogInterface dialogInterface, int i) {
-                // TODO
-             }
-         });
-
-        // Create & show the dialog
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
 
     @Override
     public void onBackPressed() { //when the user clicks the back button on his Android
@@ -195,7 +174,53 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    // activated when a user clicks on teh Switch User button in the navigation drawer
+
+    public void newTask(View view){
+        // Use a builder to do initial dialog setup for us
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        // Use our custom layout for the dialog
+        final View dialogView = getLayoutInflater().inflate(R.layout.new_task, null);
+        builder.setView(dialogView);
+        builder.setTitle(R.string.newTask);
+        final ListView lvTask = new ListView(this);
+        // initiate a Switch
+        Switch simpleSwitch = (Switch) findViewById(R.id.switch1);
+        // check current state of a Switch (true or false).
+        Boolean switchState = simpleSwitch.isChecked();
+
+        // Add the Create/Cancel buttons to the dialog
+        builder.setPositiveButton(R.string.create, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                EditText txtName = (EditText) dialogView.findViewById(R.id.txtTitle);
+                txtName.getText();
+                EditText txtNotes = (EditText) dialogView.findViewById(R.id.txtNotes);
+                txtNotes.getText();
+                EditText txtDeadLine = (EditText) dialogView.findViewById(R.id.txtDeadline);
+                txtDeadLine.getText();
+                EditText txtDuration = (EditText) dialogView.findViewById(R.id.txtDuration);
+                txtDuration.getText();
+                EditText txtEquipment = (EditText) dialogView.findViewById(R.id.txtEquipment);
+                txtEquipment.getText();
+                EditText txtPoints = (EditText) dialogView.findViewById(R.id.txtPoints);
+                txtPoints.getText();
+                //taskList = tmDB.insertTask(txtName,txtNotes, txtDuration, txtPoints, Task.TaskStatus.Unassigned, userList.);
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                // TODO
+            }
+        });
+
+        // Create & show the dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    // activated when a user clicks on the Switch User button in the navigation drawer
     public void btnChangeUser(View view){
         txtName = (TextView) findViewById(R.id.txtUser);
         final ListView lvUser = new ListView(this);

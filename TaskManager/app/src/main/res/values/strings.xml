@@ -46,5 +46,7 @@
     </string-array>
 
     <string name="title_activity_shopping_list">Shopping List</string>
+    <string name="label_Points">Points:</string>
+
 
 </resources>
