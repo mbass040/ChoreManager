@@ -9,6 +9,9 @@ import android.view.View;
 import android.widget.ListView;
 import android.content.DialogInterface;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+
 import seg2105.uottawa.com.taskmanager.source.Item;
 
 /**
@@ -17,16 +20,18 @@ import seg2105.uottawa.com.taskmanager.source.Item;
 
 public class EquipmentActivity extends FragmentActivity {
     private ListView listView;
-    Intent intent = getIntent();
+    private Intent intent;
+    private TaskManagerDatabaseHandler db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.equipment_activity);
         listView = (ListView) findViewById(R.id.list);
-        EquipmentManager manager = EquipmentManager.getInstance();
 
-        EquipmentArrayAdapter adapter = new EquipmentArrayAdapter(this, manager.getItemList());
+        intent = getIntent();
+        db = new TaskManagerDatabaseHandler(this);
+        EquipmentArrayAdapter adapter = new EquipmentArrayAdapter(this, (ArrayList<Item>) db.getItems(true));
         listView.setAdapter(adapter);
 
 
@@ -43,8 +48,6 @@ public class EquipmentActivity extends FragmentActivity {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 final TextView equipmentName = (TextView) dialogView.findViewById(R.id.txtEquipment);
-                //int equipmentIndex = intent.getIntExtra(EquipmentManager.intentIndexTitle, 0);
-                //final Item item = EquipmentManager.getInstance().getEquipmentAt(equipmentIndex);
                 Item item = new Item();
                 item.setItemName(equipmentName.getText().toString());
                 //finish();
@@ -54,7 +57,7 @@ public class EquipmentActivity extends FragmentActivity {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 
-
+                dialogInterface.dismiss();
             }
         });
 
@@ -65,7 +68,7 @@ public class EquipmentActivity extends FragmentActivity {
 
 
 
-    protected void onActivityResult(int requestCode, int resultCode, Intent datEquipmenta) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent datEquipment) {
         ListView listView = (ListView) findViewById(R.id.list);
 
         listView.refreshDrawableState();

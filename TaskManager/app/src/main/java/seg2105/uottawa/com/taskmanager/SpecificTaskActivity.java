@@ -16,9 +16,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import seg2105.uottawa.com.taskmanager.source.Item;
@@ -239,14 +242,44 @@ public class SpecificTaskActivity extends AppCompatActivity {
     }
 
     public void showMoreTaskOptions(View view) {
-
         // Build and show the dialog containing options for a specific task (finish, delete, unassign, etc.)
+        List<String[]> optionsAsTuple = new ArrayList<>();
+
+        // Populate various options for a task
+        if (currentTask.getStatus() == Task.TaskStatus.Assigned)
+            optionsAsTuple.add(new String[] {"1","Unassign Task"});
+        else
+            optionsAsTuple.add(new String[] {"2","Assign Task"});
+
+        optionsAsTuple.add(new String[] {"3","Task Completed"});
+        optionsAsTuple.add(new String[] {"4","Postpone Task"});
+        optionsAsTuple.add(new String[] {"5","Delete Task"});
+
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.taskOptionTitle);
-        builder.setItems(R.array.taskOptions, new DialogInterface.OnClickListener() {
+
+        KeyValueAdapter adapter = new KeyValueAdapter(view.getContext(), (ArrayList<String[]>) optionsAsTuple);
+        builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                // TODO
+                ListView lvOptions = ((AlertDialog)dialogInterface).getListView();
+                ListAdapter adapter = lvOptions.getAdapter();
+                int optionID = (int) adapter.getItemId(i);
+
+                switch (optionID) {
+                    case 1: // Action to unassign task
+
+                        break;
+                    case 2: // Action to assign task
+                        break;
+                    case 3: // Action to set task to complete
+                        break;
+                    case 4: // Action to postpone task
+                        break;
+                    default: // Action to delete task
+                        break;
+                }
             }
         });
 
