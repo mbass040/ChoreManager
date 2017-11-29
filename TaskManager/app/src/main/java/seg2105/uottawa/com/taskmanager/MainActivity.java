@@ -43,32 +43,16 @@ public class MainActivity extends AppCompatActivity
     private TaskManagerDatabaseHandler tmDB;
     private String newName = "";
     public AlertDialog alertDialog;
-    List<String>  userList = new ArrayList<String>();
-    List<String[]> taskList = new ArrayList<String[]>();
-    private int currentUserID;
+    private List<String>  userList = new ArrayList<String>();
     private List<Integer> taskIDs = new ArrayList<>();
+    private List<String[]> taskList = new LinkedList<String[]>();
+    private int currentUserID, totalPoints;// global variable that keeps track of the userID and total points
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         tmDB = new TaskManagerDatabaseHandler(getApplicationContext());
-
-
-//        taskList.add(new String []{"Shopping", "17 items in List"});
-//        taskList.add(new String []{"Vaccum Living Room", "Deadline: Tonight - Unassigned"});
-//        taskList.add(new String []{"Wash Car", "Note: Don't wash if it rains tonight"});
-//        taskList.add(new String []{"Wash Dishes", "Repeat: Daily"});
-//        taskList.add(new String []{"Call Veterinary", "Note: Urgent"});
-        
-        //TaskManagerDatabaseHandler db = new TaskManagerDatabaseHandler(this);
-
-        // Temporarily manually adding tasks
-//        tmDB.insertTask("Shopping", "17 items in List", "today", 4, 5, Task.TaskStatus.Unassigned, 1);
-//        tmDB.insertItem(TaskManagerDatabaseHandler.DBItemType.Equipment, "Shovel", null);
-//        tmDB.insertItem(TaskManagerDatabaseHandler.DBItemType.Equipment, "Soap", null);
-//        tmDB.insertTaskEquipment(1,1);
-//        tmDB.insertTaskEquipment(1,2);
 
         //creates a simple listView with an Item and subitem to be able to give a task a name and a description
         updateListView();
@@ -85,9 +69,6 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-//        if(userList.size() == 0){
-//            createName();
-//        }
         //initializing the widgets
         btnSwitchUser = (Button)findViewById(R.id.btnSwitchUser);
 
@@ -100,6 +81,7 @@ public class MainActivity extends AppCompatActivity
 
         // Clear from previous DB get
         taskList.clear();
+        taskIDs.clear();
 
         for (Task task : tempList) {
             taskList.add(new String []{task.getName(), task.getNotes()});
@@ -251,11 +233,11 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String name = userList.get(position);
-                int userID;
-                userID = tmDB.getUserId(name);
-                currentUserID = userID;
+                currentUserID = tmDB.getUserId(name);
+                totalPoints = tmDB.getTotalPointForUser(currentUserID);
+
                 txtName.setText(name);
-                Toast.makeText(getApplicationContext(), "ID is " + currentUserID, Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "ID is " + currentUserID + " and points is " + totalPoints, Toast.LENGTH_LONG).show();
                 alertDialog.dismiss();
             }
         });
