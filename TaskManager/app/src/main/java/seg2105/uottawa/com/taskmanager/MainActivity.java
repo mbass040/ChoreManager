@@ -57,10 +57,10 @@ public class MainActivity extends AppCompatActivity
 
         // Temporarily manually adding tasks
         db.insertTask("Shopping", "17 items in List", "today", 4, 5, Task.TaskStatus.Unassigned, 1);
-        db.insertItem(TaskManagerDatabaseHandler.DBItemType.Equipment, "Shovel", null);
-        db.insertItem(TaskManagerDatabaseHandler.DBItemType.Equipment, "Soap", null);
-        db.insertTaskEquipment(1,1);
-        db.insertTaskEquipment(1,2);
+        //db.insertItem(TaskManagerDatabaseHandler.DBItemType.Equipment, "Shovel", null);
+        //db.insertItem(TaskManagerDatabaseHandler.DBItemType.Equipment, "Soap", null);
+        //db.insertTaskEquipment(1,1);
+        //db.insertTaskEquipment(1,2);
 
         //creates a simple listView with an Item and subitem to be able to give a task a name and a description
         ArrayAdapter<String[]> adapter = new ArrayAdapter<String[]>(this, android.R.layout.simple_list_item_2, android.R.id.text1, taskList){
