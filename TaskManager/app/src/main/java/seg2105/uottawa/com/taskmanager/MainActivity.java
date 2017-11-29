@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity
     public AlertDialog alertDialog;
     List<String>  userList = new ArrayList<String>();
     List<String[]> taskList = new LinkedList<String[]>();
-
+    private int currentUserID;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,6 +99,9 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+//        if(userList.size() == 0){
+//            createName();
+//        }
         //initializing the widgets
         btnSwitchUser = (Button)findViewById(R.id.btnSwitchUser);
 
@@ -231,7 +234,9 @@ public class MainActivity extends AppCompatActivity
                 String name = userList.get(position);
                 int userID;
                 userID = tmDB.getUserId(name);
+                currentUserID = userID;
                 txtName.setText(name);
+                Toast.makeText(getApplicationContext(), "ID is " + currentUserID, Toast.LENGTH_LONG).show();
                 alertDialog.dismiss();
             }
         });
@@ -239,7 +244,6 @@ public class MainActivity extends AppCompatActivity
             @Override //when user clicks on save after entering his name
             public void onClick(DialogInterface dialog, int which) {
                 createName();
-                txtName.setText(newName);
             }
         });
 
@@ -260,6 +264,10 @@ public class MainActivity extends AppCompatActivity
             public void onClick(DialogInterface dialog, int which) {
                 newName = etName.getText().toString();
                 tmDB.insertUser(newName);
+                currentUserID = tmDB.getUserId(newName);
+                txtName.setText(newName);
+                Toast.makeText(getApplicationContext(), "ID is " + currentUserID, Toast.LENGTH_LONG).show();
+
             }
         });
 
