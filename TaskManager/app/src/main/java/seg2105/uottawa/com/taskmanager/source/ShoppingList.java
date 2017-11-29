@@ -64,9 +64,6 @@ public class ShoppingList extends AppCompatActivity {
         groceryAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, groceryList);
         materialAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, materialList);
 
-        //set the adapter
-        lvGrocery.setAdapter(groceryAdapter);
-        lvMaterial.setAdapter(materialAdapter);
 
         //set the long click listener of grocery
         lvGrocery.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -96,11 +93,15 @@ public class ShoppingList extends AppCompatActivity {
             cartItem =(CartItem) list.remove(0);
             type = cartItem.getIsAMaterial();
             if(type == CartItem.ItemType.Grocery){
-                add(cartItem.getItemName(),0);
+                populatedList(cartItem.getItemName(),0);
             }else{
-                add(cartItem.getItemName(),1);
+                populatedList(cartItem.getItemName(),1);
             }
         }
+
+        //set the adapter
+        lvGrocery.setAdapter(groceryAdapter);
+        lvMaterial.setAdapter(materialAdapter);
 
     }
     public void addDialog(View view){
@@ -116,6 +117,9 @@ public class ShoppingList extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 add(text.getText().toString(),spinner.getSelectedItemPosition());
+                Toast.makeText(ShoppingList.this,"Item added",Toast.LENGTH_SHORT).show();
+                materialAdapter.notifyDataSetChanged();
+                groceryAdapter.notifyDataSetChanged();
             }
         });
         builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -166,15 +170,17 @@ public class ShoppingList extends AppCompatActivity {
     private void add(String item,int type){
         if(type == 1){
             materialList.add(item);
-            materialAdapter.notifyDataSetChanged();
             db.insertItem(TaskManagerDatabaseHandler.DBItemType.CartItem,item,CartItem.ItemType.Material);
-
         }else{
             groceryList.add(item);
-            groceryAdapter.notifyDataSetChanged();
             db.insertItem(TaskManagerDatabaseHandler.DBItemType.CartItem,item,CartItem.ItemType.Grocery);
         }
-
-        Toast.makeText(this,"Item added",Toast.LENGTH_SHORT).show();
+    }
+    private void populatedList(String item,int type){
+        if(type == 1){
+            materialList.add(item);
+        }else{
+            groceryList.add(item);
+        }
     }
 }

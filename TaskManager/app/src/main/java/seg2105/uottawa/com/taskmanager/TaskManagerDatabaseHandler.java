@@ -153,7 +153,7 @@ public class TaskManagerDatabaseHandler extends SQLiteOpenHelper {
 
     public List<Item> getItems (boolean isEquipment) {
         // Only Equipment items have the ITEM_TYPE column as null
-        String query = "SELECT " + ITEM_ID + ", " + ITEM_NAME + " FROM " + TABLE_ITEM
+        String query = "SELECT * FROM " + TABLE_ITEM
                 + " WHERE " + CART_ITEM_TYPE + " IS" + (!isEquipment ? " NOT" : "") + " NULL";
 
         SQLiteDatabase db = this.getReadableDatabase();
