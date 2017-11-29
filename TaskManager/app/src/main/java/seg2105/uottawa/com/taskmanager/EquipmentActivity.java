@@ -9,6 +9,9 @@ import android.view.View;
 import android.widget.ListView;
 import android.content.DialogInterface;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+
 import seg2105.uottawa.com.taskmanager.source.Item;
 
 /**
@@ -25,11 +28,10 @@ public class EquipmentActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.equipment_activity);
         listView = (ListView) findViewById(R.id.list);
-        EquipmentManager manager = EquipmentManager.getInstance();
 
         intent = getIntent();
         db = new TaskManagerDatabaseHandler(this);
-        EquipmentArrayAdapter adapter = new EquipmentArrayAdapter(this, manager.getItemList());
+        EquipmentArrayAdapter adapter = new EquipmentArrayAdapter(this, (ArrayList<Item>) db.getItems(true));
         listView.setAdapter(adapter);
 
 
@@ -46,12 +48,9 @@ public class EquipmentActivity extends FragmentActivity {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 final TextView equipmentName = (TextView) dialogView.findViewById(R.id.txtEquipment);
-                //int equipmentIndex = intent.getIntExtra(EquipmentManager.intentIndexTitle, 0);
-                //final Item item = EquipmentManager.getInstance().getEquipmentAt(equipmentIndex);
                 Item item = new Item();
                 item.setItemName(equipmentName.getText().toString());
                 //finish();
-                db.getItems(true);
             }
         });
         builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -69,7 +68,7 @@ public class EquipmentActivity extends FragmentActivity {
 
 
 
-    protected void onActivityResult(int requestCode, int resultCode, Intent datEquipmenta) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent datEquipment) {
         ListView listView = (ListView) findViewById(R.id.list);
 
         listView.refreshDrawableState();
