@@ -163,7 +163,19 @@ public class TaskManagerDatabaseHandler extends SQLiteOpenHelper {
 
         if (cursItem.moveToFirst()) {
             do {
-                Item item = new Item(cursItem.getInt(0), cursItem.getString(1));
+                Item item;
+                if (!isEquipment) { // AKA if we only want cart items
+                    CartItem.ItemType type;
+                    if (cursItem.getInt(2) == 0)
+                            type = CartItem.ItemType.Grocery;
+                    else
+                        type = CartItem.ItemType.Material;
+
+                    item = new CartItem(cursItem.getInt(0), cursItem.getString(1), type);
+                }
+                else
+                    item = new Item(cursItem.getInt(0), cursItem.getString(1));
+
                 items.add(item);
             } while (cursItem.moveToNext());
         }
