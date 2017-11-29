@@ -10,10 +10,9 @@
             android:layout_marginLeft="30dp">
 
 
-
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" >
+                android:layout_height="match_parent">
 
                 <TextView
                     android:id="@+id/lblTitle"
@@ -50,6 +49,27 @@
                     android:layout_height="wrap_content"
                     android:ems="10"
                     android:inputType="textPersonName"
+                    android:textSize="14sp" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/lblPoints"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/points"
+                    android:textAlignment="textEnd" />
+
+                <EditText
+                    android:id="@+id/txtPoints"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="text"
+                    android:lines="6"
                     android:textSize="14sp" />
             </TableRow>
 
@@ -103,12 +123,12 @@
                     android:textAlignment="textEnd" />
 
                 <EditText
-                    android:id="@+id/editText4"
+                    android:id="@+id/txtNotes"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:ems="10"
-                    android:lines="6"
                     android:inputType="textMultiLine"
+                    android:lines="6"
                     android:textSize="14sp" />
             </TableRow>
         </TableLayout>
