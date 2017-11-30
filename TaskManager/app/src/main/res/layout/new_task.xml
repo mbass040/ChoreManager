@@ -32,12 +32,11 @@
             </TableRow>
 
             <TableRow
-                android:id="@+id/lblDuration"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
                 <TextView
-                    android:id="@+id/textView5"
+                    android:id="@+id/lblDuration"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/duration"
@@ -48,7 +47,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:ems="10"
-                    android:inputType="textPersonName"
+                    android:inputType="number"
                     android:textSize="14sp" />
             </TableRow>
 
@@ -68,7 +67,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:ems="10"
-                    android:inputType="text"
+                    android:inputType="number"
                     android:lines="6"
                     android:textSize="14sp" />
             </TableRow>
@@ -94,24 +93,6 @@
             </TableRow>
 
             <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" >
-
-                <TextView
-                    android:id="@+id/lblEquipment"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/lblEquipment"
-                    android:textAlignment="textEnd" />
-
-                <Spinner
-                    android:id="@+id/spnrEquipment"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-            </TableRow>
-
-            <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -128,7 +109,7 @@
                     android:layout_height="wrap_content"
                     android:ems="10"
                     android:inputType="textMultiLine"
-                    android:lines="6"
+                    android:lines="3"
                     android:textSize="14sp" />
             </TableRow>
         </TableLayout>
