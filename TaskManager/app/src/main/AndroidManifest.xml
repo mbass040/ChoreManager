@@ -31,7 +31,8 @@
         <activity
             android:name=".EquipmentActivity"
             android:label="@string/title_equipment_activity"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme"/>
         <activity
             android:name=".source.ShoppingList"
             android:label="@string/nav_shopping_list"

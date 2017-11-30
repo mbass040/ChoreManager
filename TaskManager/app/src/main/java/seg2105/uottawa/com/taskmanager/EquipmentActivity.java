@@ -6,6 +6,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import java.util.ArrayList;
 import android.widget.EditText;
+import android.widget.Toolbar;
 
 import seg2105.uottawa.com.taskmanager.source.Item;
 
@@ -21,7 +23,7 @@ import seg2105.uottawa.com.taskmanager.source.Item;
  * Created by milena_dionnne on 2017-11-22.
  */
 
-public class EquipmentActivity extends FragmentActivity {
+public class EquipmentActivity extends AppCompatActivity{
     private ListView listView;
     private Intent intent;
     private TaskManagerDatabaseHandler db;
@@ -37,6 +39,7 @@ public class EquipmentActivity extends FragmentActivity {
         intent = getIntent();
         db = new TaskManagerDatabaseHandler(this);
         setEquipmentAdapter();
+
 
 
 
