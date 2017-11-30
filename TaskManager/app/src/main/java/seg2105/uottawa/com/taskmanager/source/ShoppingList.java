@@ -118,8 +118,8 @@ public class ShoppingList extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 add(text.getText().toString(),spinner.getSelectedItemPosition());
                 Toast.makeText(ShoppingList.this,"Item added",Toast.LENGTH_SHORT).show();
-                materialAdapter.notifyDataSetChanged();
-                groceryAdapter.notifyDataSetChanged();
+                update();
+                dialog.dismiss();
             }
         });
         builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -147,11 +147,10 @@ public class ShoppingList extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 if(type ==0){
                     groceryList.set(position,text.getText().toString());
-                    groceryAdapter.notifyDataSetChanged();
                 }else{
                     materialList.set(position,text.getText().toString());
-                    materialAdapter.notifyDataSetChanged();
                 }
+                update();
                 dialog.dismiss();
             }
         });
@@ -182,5 +181,12 @@ public class ShoppingList extends AppCompatActivity {
         }else{
             groceryList.add(item);
         }
+    }
+    private void update(){
+        groceryAdapter.notifyDataSetChanged();
+        materialAdapter.notifyDataSetChanged();
+    }
+    private void modify(){
+
     }
 }

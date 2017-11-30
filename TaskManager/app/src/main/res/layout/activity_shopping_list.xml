@@ -14,7 +14,6 @@
         android:layout_height="60dp"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        app:backgroundTint="@android:color/holo_orange_dark"
         app:srcCompat="@android:drawable/ic_menu_add"
         tools:layout_editor_absoluteX="296dp"
         tools:layout_editor_absoluteY="491dp" />
