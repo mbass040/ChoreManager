@@ -7,7 +7,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -16,22 +15,27 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import seg2105.uottawa.com.taskmanager.ItemList;
 import seg2105.uottawa.com.taskmanager.R;
 import seg2105.uottawa.com.taskmanager.TaskManagerDatabaseHandler;
 
 public class ShoppingList extends AppCompatActivity {
 
     //list of item
-    private List<String> groceryList;
-    private List<String> materialList;
+    private List<Item> groceryList;
+    private List<Item> materialList;
     //adapter for item
-    private ArrayAdapter<String> groceryAdapter;
-    private ArrayAdapter<String> materialAdapter;
+    private ItemList groceryAdapter;
+    private ItemList materialAdapter;
     //item type
     private enum itemType {Equipment, CartItem};
 
     //type of list
-    private int type;
+    private CartItem.ItemType type;
+
+    //list view
+    ListView lvGrocery;
+    ListView lvMaterial;
 
     //database
     private TaskManagerDatabaseHandler db;
@@ -52,24 +56,19 @@ public class ShoppingList extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //initiate both list and database
-        groceryList = new ArrayList<String>();
-        materialList = new ArrayList<String>();
+        groceryList = new ArrayList<Item>();
+        materialList = new ArrayList<Item>();
         db = new TaskManagerDatabaseHandler(this);
 
         //get the ListView
-        ListView lvGrocery = (ListView) findViewById(R.id.lvGrocerie);
-        ListView lvMaterial = (ListView) findViewById(R.id.lvMaterial);
-
-        //create adapter
-        groceryAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, groceryList);
-        materialAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, materialList);
-
+        lvGrocery = (ListView) findViewById(R.id.lvGrocerie);
+        lvMaterial = (ListView) findViewById(R.id.lvMaterial);
 
         //set the long click listener of grocery
         lvGrocery.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                type = 0;
+                type = CartItem.ItemType.Grocery;
                 modifyDialog(position);
                 return true;
             }
@@ -79,29 +78,13 @@ public class ShoppingList extends AppCompatActivity {
         lvMaterial.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                type = 1;
+                type = CartItem.ItemType.Material;
                 modifyDialog(position);
                 return true;
             }
         });
 
-        //get value from the database
-        List<Item> list = db.getItems(false);
-        CartItem cartItem;
-        CartItem.ItemType type;
-        while(!list.isEmpty()){
-            cartItem =(CartItem) list.remove(0);
-            type = cartItem.getIsAMaterial();
-            if(type == CartItem.ItemType.Grocery){
-                populatedList(cartItem.getItemName(),0);
-            }else{
-                populatedList(cartItem.getItemName(),1);
-            }
-        }
-
-        //set the adapter
-        lvGrocery.setAdapter(groceryAdapter);
-        lvMaterial.setAdapter(materialAdapter);
+        update();
 
     }
     public void addDialog(View view){
@@ -145,18 +128,14 @@ public class ShoppingList extends AppCompatActivity {
         builder.setPositiveButton(R.string.modify, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if(type ==0){
-                    groceryList.set(position,text.getText().toString());
-                }else{
-                    materialList.set(position,text.getText().toString());
-                }
-                update();
+                //todo
                 dialog.dismiss();
             }
         });
         builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                //todo
                 dialog.dismiss();
             }
         });
@@ -168,23 +147,32 @@ public class ShoppingList extends AppCompatActivity {
 
     private void add(String item,int type){
         if(type == 1){
-            materialList.add(item);
             db.insertItem(TaskManagerDatabaseHandler.DBItemType.CartItem,item,CartItem.ItemType.Material);
         }else{
-            groceryList.add(item);
             db.insertItem(TaskManagerDatabaseHandler.DBItemType.CartItem,item,CartItem.ItemType.Grocery);
         }
     }
-    private void populatedList(String item,int type){
-        if(type == 1){
-            materialList.add(item);
-        }else{
-            groceryList.add(item);
-        }
-    }
+
     private void update(){
-        groceryAdapter.notifyDataSetChanged();
-        materialAdapter.notifyDataSetChanged();
+        //get value from the database
+        List<Item> list = db.getItems(false);
+        CartItem cartItem;
+        CartItem.ItemType type;
+        while(!list.isEmpty()){
+            cartItem =(CartItem) list.remove(0);
+            type = cartItem.getIsAMaterial();
+            if(type == CartItem.ItemType.Grocery){
+                groceryList.add(cartItem);
+            }else{
+                materialList.add(cartItem);
+            }
+        }
+
+        //set the adapter
+        groceryAdapter = new ItemList(ShoppingList.this,groceryList);
+        materialAdapter = new ItemList(ShoppingList.this,materialList);
+        lvGrocery.setAdapter(groceryAdapter);
+        lvMaterial.setAdapter(materialAdapter);
     }
     private void modify(){
 

@@ -10,9 +10,8 @@ public class CartItem extends Item {
    private ItemType type;
 
    public CartItem(int id,String name, ItemType type){
-      this.type = type;
-      itemName = name;
-      this.id = id;
+      super(id,name);
+       this.type = type;
    }
     public ItemType getIsAMaterial(){
       return type;
