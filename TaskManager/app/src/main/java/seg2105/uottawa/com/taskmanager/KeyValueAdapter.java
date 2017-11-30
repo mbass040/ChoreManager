@@ -12,9 +12,6 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Max on 2017-11-28.
- */
 
 public class KeyValueAdapter extends BaseAdapter {
 

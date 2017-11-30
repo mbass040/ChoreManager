@@ -111,14 +111,7 @@ public class TaskManagerDatabaseHandler extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion){
-        // Drop older table if exist
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_TASK_EQUIPMENT);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_ITEM);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_TASK);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_SHOPPING_CART);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_USER);
-        //Create tables again
-        onCreate(db);
+
     }
 
     //inserting a new user to TABLE_USER
@@ -186,6 +179,32 @@ public class TaskManagerDatabaseHandler extends SQLiteOpenHelper {
         return items;
     }
 
+    // Query & Subquery used to grab equipment items for a task only if these equipment items have
+    // not yet been assigned to the specified task
+    public List<Item> addableTaskEquipment(int taskID) {
+        String query = "SELECT * FROM " + TABLE_ITEM
+                + " WHERE " + CART_ITEM_TYPE + " IS NULL AND " + ITEM_ID + " NOT IN ("
+                    + " SELECT " + TASK_EQUIPMENT_EQUIPMENT_ID + " FROM " + TABLE_TASK_EQUIPMENT
+                        + " WHERE " + TASK_EQUIPMENT_TASK_ID + " = " + taskID + " )";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursEquip = db.rawQuery(query, null);
+
+        List<Item> equipment = new ArrayList<>();
+
+        if (cursEquip.moveToFirst()) {
+            do {
+                Item item = new Item(cursEquip.getInt(0), cursEquip.getString(1));
+                equipment.add(item);
+            } while (cursEquip.moveToNext());
+        }
+
+        //closing connection
+        cursEquip.close();
+        db.close();
+        return equipment;
+    }
+
     public void insertTaskEquipment (int taskID, int equipmentID) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cvTaskEquipment = new ContentValues();
@@ -197,22 +216,6 @@ public class TaskManagerDatabaseHandler extends SQLiteOpenHelper {
         db.insert(TABLE_TASK_EQUIPMENT, null, cvTaskEquipment);
         db.close();
     }
-    public void insertItem(CartItem.ItemType itemType, String itemName){
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues cvItem = new ContentValues();
-
-        cvItem.put(ITEM_NAME, itemName);
-        // the itemType parameter is used only for CartItem objects, so if we're inserting an equipment
-        // the CART_ITEM_TYPE column will be null.
-        if(itemType == null){
-            cvItem.putNull(CART_ITEM_TYPE);
-        }else{
-            cvItem.put(CART_ITEM_TYPE, itemType.ordinal());
-        }
-        db.insert(TABLE_ITEM, null, cvItem);
-        db.close();
-
-    }//insertItem
 
     public void deleteTaskEquipment (int taskID, int equipmentID) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -259,7 +262,7 @@ public class TaskManagerDatabaseHandler extends SQLiteOpenHelper {
         cvTask.put(TASK_DURATION, hoursDuration);
         cvTask.put(TASK_POINT_VALUE, pointValue);
         cvTask.put(TASK_STATUS, status.ordinal());
-        //cvTask.put(TASK_CREATED_BY, createdBy); TODO: Add current user ID
+        cvTask.put(TASK_CREATED_BY, createdBy);
         cvTask.putNull(TASK_ASSIGNED_TO); // Not assigned to anyone upon creation
 
         //inserting row
@@ -334,7 +337,7 @@ public class TaskManagerDatabaseHandler extends SQLiteOpenHelper {
         if (cursTasks.moveToFirst()) {
             Task.TaskStatus status;
 
-            switch (cursTasks.getInt(5)) {
+            switch (cursTasks.getInt(6)) {
                 case 0:
                     status = Task.TaskStatus.Completed;
                     break;
@@ -349,7 +352,7 @@ public class TaskManagerDatabaseHandler extends SQLiteOpenHelper {
                     break;
             }
 
-            task = new Task(cursTasks.getInt(0), cursTasks.getString(1), cursTasks.getString(2), cursTasks.getString(3), cursTasks.getInt(4), cursTasks.getInt(5), status, cursTasks.getInt(6), cursTasks.getInt(7));
+            task = new Task(cursTasks.getInt(0), cursTasks.getString(1), cursTasks.getString(2), cursTasks.getString(3), cursTasks.getInt(4), cursTasks.getInt(5), status, cursTasks.getInt(7), cursTasks.getInt(8));
         }
 
         //closing connection
@@ -424,7 +427,9 @@ public class TaskManagerDatabaseHandler extends SQLiteOpenHelper {
     }
     //sums the points together and returns it
     public int getTotalPointForUser(int userID){
-        String query = "SELECT SUM(" + TASK_POINT_VALUE + ") FROM " + TABLE_TASK + " WHERE " + USER_ID + " = " + userID;
+
+        // TASK_STATUS = 0 needed since we only want the completed tasks for the specified user
+        String query = "SELECT SUM(" + TASK_POINT_VALUE + ") FROM " + TABLE_TASK + " WHERE " + TASK_ASSIGNED_TO + " = " + userID + " AND " + TASK_STATUS + " = 0";
         int total = 0;
 
         SQLiteDatabase db = this.getReadableDatabase();

@@ -43,34 +43,51 @@ public class MainActivity extends AppCompatActivity
     private TaskManagerDatabaseHandler tmDB;
     private String newName = "";
     public AlertDialog alertDialog;
-    List<String>  userList = new ArrayList<String>();
-    List<String[]> taskList = new LinkedList<String[]>();
-    private int currentUserID;
+    private List<String>  userList = new ArrayList<String>();
+    private List<Integer> taskIDs = new ArrayList<>();
+    private List<String[]> taskList = new LinkedList<String[]>();
+    private int currentUserID, totalPoints;// global variable that keeps track of the userID and total points
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         tmDB = new TaskManagerDatabaseHandler(getApplicationContext());
-        ListView taskListView = (ListView) findViewById(lvTaskList);
-
-        final List<String[]> taskList = new LinkedList<String[]>();
-        taskList.add(new String []{"Shopping", "17 items in List"});
-        taskList.add(new String []{"Vaccum Living Room", "Deadline: Tonight - Unassigned"});
-        taskList.add(new String []{"Wash Car", "Note: Don't wash if it rains tonight"});
-        taskList.add(new String []{"Wash Dishes", "Repeat: Daily"});
-        taskList.add(new String []{"Call Veterinary", "Note: Urgent"});
-        
-        //TaskManagerDatabaseHandler db = new TaskManagerDatabaseHandler(this);
-
-        // Temporarily manually adding tasks
-        tmDB.insertTask("Shopping", "17 items in List", "today", 4, 5, Task.TaskStatus.Unassigned, 1);
-        tmDB.insertItem(TaskManagerDatabaseHandler.DBItemType.Equipment, "Shovel", null);
-        tmDB.insertItem(TaskManagerDatabaseHandler.DBItemType.Equipment, "Soap", null);
-        tmDB.insertTaskEquipment(1,1);
-        tmDB.insertTaskEquipment(1,2);
 
         //creates a simple listView with an Item and subitem to be able to give a task a name and a description
+        updateListView();
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        //initializing the widgets
+        btnSwitchUser = (Button)findViewById(R.id.btnSwitchUser);
+
+
+    }
+
+    private void updateListView () {
+        ListView taskListView = (ListView) findViewById(lvTaskList);
+        List<Task> tempList = tmDB.getTasks(false);
+
+        // Clear from previous DB get
+        taskList.clear();
+        taskIDs.clear();
+
+        for (Task task : tempList) {
+            taskList.add(new String []{task.getName(), task.getNotes()});
+            taskIDs.add(task.getID());
+        }
+
         ArrayAdapter<String[]> adapter = new ArrayAdapter<String[]>(this, android.R.layout.simple_list_item_2, android.R.id.text1, taskList){
             @Override
             public View getView(int position, View convertView, ViewGroup parent){
@@ -88,28 +105,13 @@ public class MainActivity extends AppCompatActivity
 
         taskListView.setAdapter(adapter);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-
-//        if(userList.size() == 0){
-//            createName();
-//        }
-        //initializing the widgets
-        btnSwitchUser = (Button)findViewById(R.id.btnSwitchUser);
-
-
+        taskListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                viewTaskDetails(taskIDs.get(i));
+            }
+        });
     }
-
-
 
     @Override
     public void onBackPressed() { //when the user clicks the back button on his Android
@@ -157,7 +159,7 @@ public class MainActivity extends AppCompatActivity
 
         // Temporary for testing
         if (id == R.id.nav_open_task) {
-            viewTaskDetails();
+            viewTaskDetails(1);
         }
         else if (id == R.id.nav_shop){
             Intent intent = new Intent(this, ShoppingList.class);
@@ -180,7 +182,6 @@ public class MainActivity extends AppCompatActivity
         final View dialogView = getLayoutInflater().inflate(R.layout.new_task, null);
         builder.setView(dialogView);
         builder.setTitle(R.string.newTask);
-        final ListView lvTask = new ListView(this);
         // initiate a Switch
         Switch simpleSwitch = (Switch) findViewById(R.id.switch1);
         // check current state of a Switch (true or false).
@@ -198,11 +199,10 @@ public class MainActivity extends AppCompatActivity
                 String deadline = txtDeadLine.getText().toString();
                 EditText txtDuration = (EditText) dialogView.findViewById(R.id.txtDuration);
                 Integer duration = Integer.valueOf(txtDuration.getText().toString());
-                EditText txtEquipment = (EditText) dialogView.findViewById(R.id.txtEquipment);
-                String equipment = txtEquipment.getText().toString();
                 EditText txtPoints = (EditText) dialogView.findViewById(R.id.txtPoints);
                 Integer points = Integer.valueOf(txtPoints.getText().toString());
-                tmDB.insertTask(name, note, deadline, duration, points, Task.TaskStatus.Unassigned, 1);
+                tmDB.insertTask(name, note, deadline, duration, points, Task.TaskStatus.Unassigned, currentUserID);
+                updateListView();
             }
         });
         builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -233,11 +233,11 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String name = userList.get(position);
-                int userID;
-                userID = tmDB.getUserId(name);
-                currentUserID = userID;
+                currentUserID = tmDB.getUserId(name);
+                totalPoints = tmDB.getTotalPointForUser(currentUserID);
+
                 txtName.setText(name);
-                Toast.makeText(getApplicationContext(), "ID is " + currentUserID, Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "ID is " + currentUserID + " and points is " + totalPoints, Toast.LENGTH_LONG).show();
                 alertDialog.dismiss();
             }
         });
@@ -283,11 +283,11 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    public void viewTaskDetails() {
+    public void viewTaskDetails(int id) {
         Intent intent = new Intent(this, SpecificTaskActivity.class);
 
         //Pass task's ID to the detail activity so that it can load the task's values
-        intent.putExtra("taskID", 1);
+        intent.putExtra("taskID", id);
 
         startActivityForResult(intent, RESULT_OK);
     }

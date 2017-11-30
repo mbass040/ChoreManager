@@ -21,11 +21,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import seg2105.uottawa.com.taskmanager.source.Item;
 import seg2105.uottawa.com.taskmanager.source.Task;
+import seg2105.uottawa.com.taskmanager.source.User;
 
 public class SpecificTaskActivity extends AppCompatActivity {
 
@@ -48,6 +48,47 @@ public class SpecificTaskActivity extends AppCompatActivity {
         currentTaskID = intent.getIntExtra("taskID", -1);
 
         setToReadOnly(null);
+
+        Button btnAddEquipment = (Button) findViewById(R.id.btnAddEquipment);
+
+        btnAddEquipment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+
+                List<String[]> allEquipment = new ArrayList<>();
+
+                List<Item> tempEquipList = db.addableTaskEquipment(currentTaskID);
+
+                // Only extract the title and ID values needed for displaying
+                for (Item equipment : tempEquipList) {
+                    allEquipment.add(new String[] {String.valueOf(equipment.getID()), equipment.getItemName()});
+                }
+
+                // Set the title dynamically
+                builder.setTitle((allEquipment.size() == 0 ? "No Equipment Exist" : "Add Equipment Item"));
+
+                // Create adapter with returned equipment values
+                KeyValueAdapter adapter = new KeyValueAdapter(view.getContext(), (ArrayList<String[]>) allEquipment);
+                builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        ListView lvOptions = ((AlertDialog)dialogInterface).getListView();
+                        ListAdapter adapter = lvOptions.getAdapter();
+                        int equipID = (int) adapter.getItemId(i);
+
+                        // Insert association between a task and an equipment item
+                        db.insertTaskEquipment(currentTaskID, equipID);
+
+                        // refresh the grid view with the new values
+                        updateTaskEquipmentGridView(view.getContext());
+                    }
+                });
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+        });
     }
 
 
@@ -196,9 +237,8 @@ public class SpecificTaskActivity extends AppCompatActivity {
         lblTaskWhenToComplete.setText(currentTask.getDeadline());
 
         // TODO: Use Creator ID
-        //User creator = db.getUser(task.getCreatedBy());
-        //lblTaskCreatorName.setText(creator.getName());
-        lblTaskCreatorName.setText("Christopher Wallace");
+        User creator = db.getUser(currentTask.getCreatedBy());
+        lblTaskCreatorName.setText(creator.getName());
 
         // Display the task's notes
         tvNotes.setText(currentTask.getNotes());
