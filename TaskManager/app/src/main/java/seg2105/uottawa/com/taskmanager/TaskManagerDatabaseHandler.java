@@ -443,4 +443,12 @@ public class TaskManagerDatabaseHandler extends SQLiteOpenHelper {
 
         return total;
     }
+
+    public void updateItem(int itemID,String itemName){
+        ContentValues cv = new ContentValues();
+        cv.put(ITEM_NAME,itemName);
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.update(TABLE_ITEM,cv,ITEM_ID +" = "+itemID,null);
+        db.close();;
+    }
 }
