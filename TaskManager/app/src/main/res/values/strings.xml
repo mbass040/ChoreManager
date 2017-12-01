@@ -38,6 +38,7 @@
     <string name="shoppingModify">Modify An Item</string>
     <string name="add">Add</string>
     <string name="modify">Modify</string>
+    <string name="delete">Delete</string>
 
 
     <string-array name="shoppingListOption">

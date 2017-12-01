@@ -34,8 +34,8 @@ public class ShoppingList extends AppCompatActivity {
     private CartItem.ItemType type;
 
     //list view
-    ListView lvGrocery;
-    ListView lvMaterial;
+    private ListView lvGrocery;
+    private ListView lvMaterial;
 
     //database
     private TaskManagerDatabaseHandler db;
@@ -128,14 +128,16 @@ public class ShoppingList extends AppCompatActivity {
         builder.setPositiveButton(R.string.modify, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                //todo
+                modify(position,text.getText().toString());
+                update();
                 dialog.dismiss();
             }
         });
-        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(R.string.delete, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                //todo
+                delete(position);
+                update();
                 dialog.dismiss();
             }
         });
@@ -158,6 +160,8 @@ public class ShoppingList extends AppCompatActivity {
         List<Item> list = db.getItems(false);
         CartItem cartItem;
         CartItem.ItemType type;
+        materialList.clear();
+        groceryList.clear();
         while(!list.isEmpty()){
             cartItem =(CartItem) list.remove(0);
             type = cartItem.getIsAMaterial();
@@ -174,7 +178,19 @@ public class ShoppingList extends AppCompatActivity {
         lvGrocery.setAdapter(groceryAdapter);
         lvMaterial.setAdapter(materialAdapter);
     }
-    private void modify(){
+    private void modify(int position,String name){
+        if(type == CartItem.ItemType.Grocery){
+            db.updateItem(groceryList.get(position).getID(),name);
+        }else{
+            db.updateItem(materialList.get(position).getID(),name);
+        }
+    }
 
+    private void delete(int position){
+        if(type == CartItem.ItemType.Grocery){
+            db.deleteItem(groceryList.get(position).getID());
+        }else{
+            db.deleteItem(materialList.get(position).getID());
+        }
     }
 }
