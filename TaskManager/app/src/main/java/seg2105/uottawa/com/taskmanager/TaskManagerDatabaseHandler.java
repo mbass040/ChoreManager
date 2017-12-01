@@ -451,4 +451,10 @@ public class TaskManagerDatabaseHandler extends SQLiteOpenHelper {
         db.update(TABLE_ITEM,cv,ITEM_ID +" = "+itemID,null);
         db.close();;
     }
+
+    public void deleteItem(int itemID) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_ITEM, ITEM_ID + " = " + itemID, null);
+        db.close();
+    }
 }

@@ -7,5 +7,6 @@
         android:layout_width="match_parent"
         android:id="@+id/tvName"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+        android:padding="10dp"
         android:text=""/>
 </LinearLayout>

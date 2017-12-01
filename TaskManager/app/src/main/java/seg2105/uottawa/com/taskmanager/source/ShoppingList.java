@@ -133,9 +133,11 @@ public class ShoppingList extends AppCompatActivity {
                 dialog.dismiss();
             }
         });
-        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(R.string.delete, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                delete(position);
+                update();
                 dialog.dismiss();
             }
         });
@@ -181,6 +183,14 @@ public class ShoppingList extends AppCompatActivity {
             db.updateItem(groceryList.get(position).getID(),name);
         }else{
             db.updateItem(materialList.get(position).getID(),name);
+        }
+    }
+
+    private void delete(int position){
+        if(type == CartItem.ItemType.Grocery){
+            db.deleteItem(groceryList.get(position).getID());
+        }else{
+            db.deleteItem(materialList.get(position).getID());
         }
     }
 }
