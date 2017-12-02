@@ -38,6 +38,7 @@ import static seg2105.uottawa.com.taskmanager.R.id.lvTaskList;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    static final int CHILD_DONE = 1;
     private TextView txtName;
     private Button btnSwitchUser;
     private TaskManagerDatabaseHandler tmDB;
@@ -283,12 +284,23 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Refresh listview when child activity has finished (i.e. Specific Task), task could have been deleted
+        if (resultCode == CHILD_DONE)
+            updateListView();
+
+    }
+
     public void viewTaskDetails(int id) {
         Intent intent = new Intent(this, SpecificTaskActivity.class);
 
         //Pass task's ID to the detail activity so that it can load the task's values
         intent.putExtra("taskID", id);
 
-        startActivityForResult(intent, RESULT_OK);
+        // Pass the current user's ID, need to ensure we show appropriate actions based the user's role toward the task
+        intent.putExtra("userID", currentUserID);
+
+        startActivityForResult(intent, CHILD_DONE);
     }
 }

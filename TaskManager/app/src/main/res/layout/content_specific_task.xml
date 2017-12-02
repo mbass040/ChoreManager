@@ -37,11 +37,6 @@
             tools:layout_editor_absoluteX="8dp"
             tools:layout_editor_absoluteY="8dp">
 
-            <ImageView
-                android:id="@+id/imgUser"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:srcCompat="@mipmap/ic_launcher_round" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -60,7 +55,6 @@
                     android:id="@+id/lblAssigneeName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Ben Wallace"
                     android:textColor="@android:color/black"
                     android:textSize="20sp"
                     android:textStyle="bold" />
@@ -76,7 +70,7 @@
 
                 <Button
                     android:id="@+id/btnUnassignUser"
-                    android:layout_width="41dp"
+                    android:layout_width="35dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.06"
                     android:background="@drawable/roundedbutton"

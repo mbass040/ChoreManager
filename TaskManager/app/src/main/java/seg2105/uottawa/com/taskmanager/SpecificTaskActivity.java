@@ -20,6 +20,8 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +35,7 @@ public class SpecificTaskActivity extends AppCompatActivity {
     private TaskManagerDatabaseHandler db;
     private Task currentTask;
     private int currentTaskID;
+    private int currentUserID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +49,7 @@ public class SpecificTaskActivity extends AppCompatActivity {
         Intent intent = getIntent();
 
         currentTaskID = intent.getIntExtra("taskID", -1);
+        currentUserID = intent.getIntExtra("userID", -1);
 
         setToReadOnly(null);
 
@@ -228,10 +232,17 @@ public class SpecificTaskActivity extends AppCompatActivity {
 
         TextView lblDuration = (TextView) findViewById(R.id.lblTaskHowLong),
                 lblTaskWhenToComplete = (TextView) findViewById(R.id.lblTaskWhenToComplete),
-                lblTaskCreatorName = (TextView) findViewById(R.id.lblTaskCreatorName);
+                lblTaskCreatorName = (TextView) findViewById(R.id.lblTaskCreatorName),
+                lblAssigneeName = (TextView) findViewById(R.id.lblAssigneeName);
 
         // Display duration label
         lblDuration.setText(currentTask.getHoursDuration() + " hour" + (currentTask.getHoursDuration() == 1 ? "" : "s"));
+
+        // Set the label of who this task is assigned to
+        if (currentTask.getStatus() == Task.TaskStatus.Unassigned)
+            lblAssigneeName.setText(R.string.unassigned);
+        else
+            lblAssigneeName.setText(db.getUser(currentTask.getAssignedTo()).getName());
 
         // Display deadline label
         lblTaskWhenToComplete.setText(currentTask.getDeadline());
@@ -285,16 +296,20 @@ public class SpecificTaskActivity extends AppCompatActivity {
         // Build and show the dialog containing options for a specific task (finish, delete, unassign, etc.)
         List<String[]> optionsAsTuple = new ArrayList<>();
 
-        // Populate various options for a task
-        if (currentTask.getStatus() == Task.TaskStatus.Assigned)
-            optionsAsTuple.add(new String[] {"1","Unassign Task"});
-        else
+        // Populate various options for a task, limit the options based on the role of current user
+        if (currentTask.getStatus() == Task.TaskStatus.Unassigned)
             optionsAsTuple.add(new String[] {"2","Assign Task"});
 
-        optionsAsTuple.add(new String[] {"3","Task Completed"});
-        optionsAsTuple.add(new String[] {"4","Postpone Task"});
-        optionsAsTuple.add(new String[] {"5","Delete Task"});
+        // Different actions based on user's role
+        if (currentUserID == currentTask.getAssignedTo()) {
+            optionsAsTuple.add(new String[] {"3","Complete Task"});
+            optionsAsTuple.add(new String[] {"4","Postpone Task"});
+        }
 
+        if (currentUserID == currentTask.getCreatedBy()) {
+            optionsAsTuple.add(new String[] {"5","Delete Task"});
+            optionsAsTuple.add(new String[]{"1", "Unassign Task"});
+        }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.taskOptionTitle);
@@ -309,15 +324,41 @@ public class SpecificTaskActivity extends AppCompatActivity {
 
                 switch (optionID) {
                     case 1: // Action to unassign task
-
+                        db.updateTaskStatus(currentTaskID, Task.TaskStatus.Unassigned, -1);
+                        setToReadOnly(null);
                         break;
                     case 2: // Action to assign task
+                        List<String> users = db.getAllUsers();
+                        AlertDialog.Builder userDialogBuilder = new AlertDialog.Builder(((AlertDialog) dialogInterface).getContext());
+                        ArrayAdapter<String> userAdapter = new ArrayAdapter<>(((AlertDialog) dialogInterface).getContext(),android.R.layout.simple_list_item_1, users);
+
+                        userDialogBuilder.setTitle("Assign To");
+
+                        // Assign data adapter to builder, then override the click listener
+                        userDialogBuilder.setAdapter(userAdapter, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                String selectedUser = (String) ((AlertDialog)dialogInterface).getListView().getItemAtPosition(i);
+
+                                // Fetch the userID by the user's name, then update the task to assign it to them
+                                int userID = db.getUserId(selectedUser);
+                                db.updateTaskStatus(currentTaskID, Task.TaskStatus.Assigned, userID);
+                                setToReadOnly(null);
+                            }
+                        });
+
+                        userDialogBuilder.create().show();
                         break;
                     case 3: // Action to set task to complete
+                        db.updateTaskStatus(currentTaskID, Task.TaskStatus.Completed, -1);
                         break;
                     case 4: // Action to postpone task
                         break;
                     default: // Action to delete task
+                        // Delete the task, then close the activity to return to the parent one
+                        db.deleteTask(currentTaskID);
+                        setResult(MainActivity.CHILD_DONE);
+                        finish();
                         break;
                 }
             }
