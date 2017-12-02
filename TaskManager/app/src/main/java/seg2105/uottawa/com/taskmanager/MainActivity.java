@@ -17,12 +17,14 @@ import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import android.widget.ToggleButton;
 
 
 import java.util.ArrayList;
@@ -47,14 +49,31 @@ public class MainActivity extends AppCompatActivity
     private List<String[]> taskList = new LinkedList<String[]>();
     private int currentUserID, totalPoints;// global variable that keeps track of the userID and total points
     private SharedPreferences sharedPref;
+    private boolean justMe = false; //global variable that checks if the user wants to just see his own tasks or everybody's tasks
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         tmDB = new TaskManagerDatabaseHandler(getApplicationContext());
 
+        Switch justMeSwitch = (Switch) findViewById(R.id.switch1);
+        justMeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                // The switch is enabled
+                if (isChecked) {
+                    justMe = true;
+                }
+                // The switch is disabled
+                else {
+                    justMe =false;
+                }
+            }
+        });
+
         //creates a simple listView with an Item and subitem to be able to give a task a name and a description
-        updateListView();
+        updateListView(justMe);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -75,19 +94,27 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    private void updateListView () {
+    private void updateListView (boolean justMe) {
         ListView taskListView = (ListView) findViewById(lvTaskList);
-        List<Task> tempList = tmDB.getTasks(false);
+        List<Task> tempList = tmDB.getTasks(justMe);
 
         // Clear from previous DB get
         taskList.clear();
         taskIDs.clear();
-
-        for (Task task : tempList) {
-            taskList.add(new String []{task.getName(), task.getNotes()});
-            taskIDs.add(task.getID());
+        if (justMe == true) {
+            for (Task task : tempList) {
+                if (task.getID() == currentUserID) {
+                    taskList.add(new String[]{task.getName(), task.getNotes()});
+                    taskIDs.add(task.getID());
+                }
+            }
         }
-
+        else{
+            for (Task task : tempList) {
+                taskList.add(new String []{task.getName(), task.getNotes()});
+                taskIDs.add(task.getID());
+            }
+        }
         ArrayAdapter<String[]> adapter = new ArrayAdapter<String[]>(this, android.R.layout.simple_list_item_2, android.R.id.text1, taskList){
             @Override
             public View getView(int position, View convertView, ViewGroup parent){
@@ -185,6 +212,7 @@ public class MainActivity extends AppCompatActivity
         builder.setPositiveButton(R.string.create, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+                Integer duration, points;
                 EditText txtName = (EditText) dialogView.findViewById(R.id.txtTitle);
                 String name = txtName.getText().toString();
                 EditText txtNotes = (EditText) dialogView.findViewById(R.id.txtNotes);
@@ -192,11 +220,21 @@ public class MainActivity extends AppCompatActivity
                 EditText txtDeadLine = (EditText) dialogView.findViewById(R.id.txtDeadline);
                 String deadline = txtDeadLine.getText().toString();
                 EditText txtDuration = (EditText) dialogView.findViewById(R.id.txtDuration);
-                Integer duration = Integer.valueOf(txtDuration.getText().toString());
+                if (txtDuration.getText().toString() == ""){
+                    duration = 0;
+                }
+                else{
+                    duration = Integer.valueOf(txtDuration.getText().toString());
+                }
                 EditText txtPoints = (EditText) dialogView.findViewById(R.id.txtPoints);
-                Integer points = Integer.valueOf(txtPoints.getText().toString());
+                if (txtPoints.getText().toString() == ""){
+                    points = 0;
+                }
+                else{
+                    points = Integer.valueOf(txtPoints.getText().toString());
+                }
                 tmDB.insertTask(name, note, deadline, duration, points, Task.TaskStatus.Unassigned, currentUserID);
-                updateListView();
+                updateListView(justMe);
             }
         });
         builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -292,7 +330,7 @@ public class MainActivity extends AppCompatActivity
         int savedID = sharedPref.getInt(getString(R.string.sharedPrefUserID), -1);
         // Refresh listview when child activity has finished (i.e. Specific Task), task could have been deleted
         if (resultCode == CHILD_DONE){
-            updateListView();
+            updateListView(justMe);
             setCurrentUser(savedID);
         }
 
