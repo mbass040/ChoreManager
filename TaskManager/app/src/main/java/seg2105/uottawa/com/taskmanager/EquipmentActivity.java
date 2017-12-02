@@ -108,5 +108,4 @@ public class EquipmentActivity extends AppCompatActivity{
         }
         return true;
     }
-
 }

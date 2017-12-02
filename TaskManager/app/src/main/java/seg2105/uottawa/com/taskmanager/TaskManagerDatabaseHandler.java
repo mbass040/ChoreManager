@@ -2,7 +2,6 @@ package seg2105.uottawa.com.taskmanager;
 
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.content.Context;
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -390,14 +389,6 @@ public class TaskManagerDatabaseHandler extends SQLiteOpenHelper {
 
         db.close();
     }
-
-    //insert a new Cart Item to TABLE_CART_ITEM
-//    public void insertCartItem(String cartItemName, int itemType){
-//        SQLiteDatabase db = this.getWritableDatabase();
-//
-//        ContentValues cvCartItem = new ContentValues();
-//        cvCartItem.put(ITEM_NAME, cartItemName);
-//    }
 
 
     public List<String> getAllUsers(){

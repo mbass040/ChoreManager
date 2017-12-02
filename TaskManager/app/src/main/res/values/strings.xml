@@ -19,7 +19,7 @@
     <string name="taskCreatedBy">Created By</string>
     <string name="equipmentNeeded">Equipment Needed</string>
     <string name="notes">Notes</string>
-    <string name="title_equipment_activity">Tools</string>
+    <string name="title_equipment_activity">Equipment</string>
     <string name="newEquipment">New Equipment</string>
     <string name="newTask">New Task</string>
     <string name="create">Add</string>
@@ -30,7 +30,7 @@
     <string name="lblEquipment">Equipment:</string>
     <string name="lblNotes">Notes:</string>
     <string name="selectUser">Select a user</string>
-    <string name="grocerie">Grocery</string>
+    <string name="grocery">Grocery</string>
     <string name="material">Material</string>
     <string name="hour">hour</string>
     <string name="points">Points:</string>
