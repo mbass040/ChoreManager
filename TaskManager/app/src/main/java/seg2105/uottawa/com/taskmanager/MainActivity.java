@@ -80,6 +80,10 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        DrawerLayout drawerIntro = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawerIntro.openDrawer(GravityCompat.START);
+        drawerIntro.closeDrawer(GravityCompat.START);
+
         // user id will be stored in the shared preferences to be easier to maintain it
         sharedPref = getSharedPreferences("main_activity", MODE_PRIVATE);
 
@@ -189,62 +193,65 @@ public class MainActivity extends AppCompatActivity
 
 
     public void newTask(View view){
-        // Use a builder to do initial dialog setup for us
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-        // Use our custom layout for the dialog
-        final View dialogView = getLayoutInflater().inflate(R.layout.new_task, null);
-        builder.setView(dialogView);
-        builder.setTitle(R.string.newTask);
-        // initiate a Switch
-        Switch simpleSwitch = (Switch) findViewById(R.id.switch1);
-        // check current state of a Switch (true or false).
-        Boolean switchState = simpleSwitch.isChecked();
+        if(tmDB.getAllUsers().size() == 0) {
+            createName(true);
+            return;
+        }
 
-        // Add the Create/Cancel buttons to the dialog
-        builder.setPositiveButton(R.string.create, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                Integer duration, points;
-                EditText txtName = (EditText) dialogView.findViewById(R.id.txtTitle);
-                String name = txtName.getText().toString();
-                EditText txtNotes = (EditText) dialogView.findViewById(R.id.txtNotes);
-                String note = txtNotes.getText().toString();
-                EditText txtDeadLine = (EditText) dialogView.findViewById(R.id.txtDeadline);
-                String deadline = txtDeadLine.getText().toString();
-                EditText txtDuration = (EditText) dialogView.findViewById(R.id.txtDuration);
-                if (txtDuration.getText().toString() == ""){
-                    duration = 0;
-                }
-                else{
-                    duration = Integer.valueOf(txtDuration.getText().toString());
-                }
-                EditText txtPoints = (EditText) dialogView.findViewById(R.id.txtPoints);
-                if (txtPoints.getText().toString() == ""){
-                    points = 0;
-                }
-                else{
-                    points = Integer.valueOf(txtPoints.getText().toString());
-                }
-                tmDB.insertTask(name, note, deadline, duration, points, Task.TaskStatus.Unassigned, currentUserID);
-                updateListView(justMe);
-            }
-        });
-        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                // TODO
-            }
-        });
+            // Use a builder to do initial dialog setup for us
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-        // Create & show the dialog
-        AlertDialog dialog = builder.create();
-        dialog.show();
+            // Use our custom layout for the dialog
+            final View dialogView = getLayoutInflater().inflate(R.layout.new_task, null);
+            builder.setView(dialogView);
+            builder.setTitle(R.string.newTask);
+            // initiate a Switch
+            Switch simpleSwitch = (Switch) findViewById(R.id.switch1);
+            // check current state of a Switch (true or false).
+            Boolean switchState = simpleSwitch.isChecked();
+
+            // Add the Create/Cancel buttons to the dialog
+            builder.setPositiveButton(R.string.create, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    Integer duration, points;
+                    EditText txtName = (EditText) dialogView.findViewById(R.id.txtTitle);
+                    String name = txtName.getText().toString();
+                    EditText txtNotes = (EditText) dialogView.findViewById(R.id.txtNotes);
+                    String note = txtNotes.getText().toString();
+                    EditText txtDeadLine = (EditText) dialogView.findViewById(R.id.txtDeadline);
+                    String deadline = txtDeadLine.getText().toString();
+                    EditText txtDuration = (EditText) dialogView.findViewById(R.id.txtDuration);
+                    if (txtDuration.getText().toString() == "") {
+                        duration = 0;
+                    } else {
+                        duration = Integer.valueOf(txtDuration.getText().toString());
+                    }
+                    EditText txtPoints = (EditText) dialogView.findViewById(R.id.txtPoints);
+                    if (txtPoints.getText().toString() == "") {
+                        points = 0;
+                    } else {
+                        points = Integer.valueOf(txtPoints.getText().toString());
+                    }
+                    tmDB.insertTask(name, note, deadline, duration, points, Task.TaskStatus.Unassigned, currentUserID);
+                    updateListView(justMe);
+                }
+            });
+            builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.dismiss();
+                }
+            });
+
+            // Create & show the dialog
+            AlertDialog dialog = builder.create();
+            dialog.show();
     }
 
     // activated when a user clicks on the Switch User button in the navigation drawer
     public void btnChangeUser(View view){
-        txtName = (TextView) findViewById(R.id.txtUser);
         final ListView lvUser = new ListView(this);
         userList = tmDB.getAllUsers();
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -267,7 +274,7 @@ public class MainActivity extends AppCompatActivity
         builder.setPositiveButton("New User", new DialogInterface.OnClickListener() {
             @Override //when user clicks on save after entering his name
             public void onClick(DialogInterface dialog, int which) {
-                createName();
+                createName(false);
             }
         });
 
@@ -277,7 +284,7 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    public void createName(){
+    public void createName(final boolean isNewTask){
         //create a alert dialog box that will prompt the new user to enter his name
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
         alert.setTitle("What is your name?");
@@ -288,11 +295,14 @@ public class MainActivity extends AppCompatActivity
             public void onClick(DialogInterface dialog, int which) {
                 newName = etName.getText().toString();
                 currentUserID = tmDB.insertUser(newName);
-
-
                 setCurrentUser(currentUserID);
+
                 Toast.makeText(getApplicationContext(), "ID is " + currentUserID, Toast.LENGTH_LONG).show();
                 dialog.dismiss();
+
+                if(isNewTask){
+                    newTask(null);
+                }
             }
         });
 
@@ -308,6 +318,8 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void setCurrentUser(int userID){
+        txtName = (TextView) findViewById(R.id.txtUser);
+
         //Shared preference code retrieved from
         //https://developer.android.com/training/data-storage/shared-preferences.html
         SharedPreferences.Editor editor = sharedPref.edit();
