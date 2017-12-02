@@ -62,6 +62,7 @@ public class MainActivity extends AppCompatActivity
         justMeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 justMe = isChecked; //true if toggled, false otherwise
+                updateListView(justMe);
             }
         });
 
@@ -98,7 +99,8 @@ public class MainActivity extends AppCompatActivity
         // Clear from previous DB get
         taskList.clear();
         taskIDs.clear();
-        if (justMe == true) {
+        if (justMe) {
+            // Just select the tasks assigned to the current user
             for (Task task : tempList) {
                 if (task.getID() == currentUserID) {
                     taskList.add(new String[]{task.getName(), task.getNotes()});

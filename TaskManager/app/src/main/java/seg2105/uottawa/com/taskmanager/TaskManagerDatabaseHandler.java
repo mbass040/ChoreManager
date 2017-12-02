@@ -293,9 +293,6 @@ public class TaskManagerDatabaseHandler extends SQLiteOpenHelper {
         // Get tasks that are not 'Completed'
         String query = "SELECT * FROM " + TABLE_TASK + " WHERE " + TASK_STATUS + " <> 0";
 
-        //if (meOnly)
-            // TODO: use current user for WHERE clause
-
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursTasks = db.rawQuery(query, null);
 
