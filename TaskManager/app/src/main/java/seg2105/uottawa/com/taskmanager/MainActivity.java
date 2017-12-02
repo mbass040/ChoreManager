@@ -217,6 +217,7 @@ public class MainActivity extends AppCompatActivity
         builder.setPositiveButton(R.string.create, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+                Integer duration, points;
                 EditText txtName = (EditText) dialogView.findViewById(R.id.txtTitle);
                 String name = txtName.getText().toString();
                 EditText txtNotes = (EditText) dialogView.findViewById(R.id.txtNotes);
@@ -224,9 +225,19 @@ public class MainActivity extends AppCompatActivity
                 EditText txtDeadLine = (EditText) dialogView.findViewById(R.id.txtDeadline);
                 String deadline = txtDeadLine.getText().toString();
                 EditText txtDuration = (EditText) dialogView.findViewById(R.id.txtDuration);
-                Integer duration = Integer.valueOf(txtDuration.getText().toString());
+                if (txtDuration.getText().toString() == ""){
+                    duration = 0;
+                }
+                else{
+                    duration = Integer.valueOf(txtDuration.getText().toString());
+                }
                 EditText txtPoints = (EditText) dialogView.findViewById(R.id.txtPoints);
-                Integer points = Integer.valueOf(txtPoints.getText().toString());
+                if (txtPoints.getText().toString() == ""){
+                    points = 0;
+                }
+                else{
+                    points = Integer.valueOf(txtPoints.getText().toString());
+                }
                 tmDB.insertTask(name, note, deadline, duration, points, Task.TaskStatus.Unassigned, currentUserID);
                 updateListView(justMe);
             }
