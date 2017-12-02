@@ -61,14 +61,7 @@ public class MainActivity extends AppCompatActivity
         Switch justMeSwitch = (Switch) findViewById(R.id.switch1);
         justMeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                // The switch is enabled
-                if (isChecked) {
-                    justMe = true;
-                }
-                // The switch is disabled
-                else {
-                    justMe =false;
-                }
+                justMe = isChecked; //true if toggled, false otherwise
             }
         });
 
