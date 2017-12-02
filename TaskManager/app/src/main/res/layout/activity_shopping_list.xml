@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="seg2105.uottawa.com.taskmanager.source.ShoppingList">
+    tools:context="seg2105.uottawa.com.taskmanager.ShoppingList">
 
     <include layout="@layout/content_shopping_list" />
 

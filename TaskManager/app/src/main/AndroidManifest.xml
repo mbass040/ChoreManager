@@ -34,7 +34,7 @@
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme"/>
         <activity
-            android:name=".source.ShoppingList"
+            android:name=".ShoppingList"
             android:label="@string/nav_shopping_list"
             android:parentActivityName=".MainActivity" />
     </application>

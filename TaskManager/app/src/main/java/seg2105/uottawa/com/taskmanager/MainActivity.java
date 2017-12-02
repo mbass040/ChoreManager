@@ -2,6 +2,7 @@ package seg2105.uottawa.com.taskmanager;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
@@ -16,7 +17,6 @@ import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Switch;
@@ -29,7 +29,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import seg2105.uottawa.com.taskmanager.source.ShoppingList;
 import seg2105.uottawa.com.taskmanager.source.Task;
 
 
@@ -40,7 +39,6 @@ public class MainActivity extends AppCompatActivity
 
     static final int CHILD_DONE = 1;
     private TextView txtName;
-    private Button btnSwitchUser;
     private TaskManagerDatabaseHandler tmDB;
     private String newName = "";
     public AlertDialog alertDialog;
@@ -48,7 +46,7 @@ public class MainActivity extends AppCompatActivity
     private List<Integer> taskIDs = new ArrayList<>();
     private List<String[]> taskList = new LinkedList<String[]>();
     private int currentUserID, totalPoints;// global variable that keeps track of the userID and total points
-
+    private SharedPreferences sharedPref;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,8 +68,9 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        //initializing the widgets
-        btnSwitchUser = (Button)findViewById(R.id.btnSwitchUser);
+        // user id will be stored in the shared preferences to be easier to maintain it
+        sharedPref = getSharedPreferences("main_activity", MODE_PRIVATE);
+
 
 
     }
@@ -158,15 +157,9 @@ public class MainActivity extends AppCompatActivity
             startActivityForResult(intent,0);
         }
 
-        // Temporary for testing
-        if (id == R.id.nav_open_task) {
-            viewTaskDetails(1);
-        }
-        else if (id == R.id.nav_shop){
+        if (id == R.id.nav_shop){
             Intent intent = new Intent(this, ShoppingList.class);
             startActivityForResult(intent,RESULT_OK);
-        }else if(id == R.id.nav_backlog){
-            Toast.makeText(getApplicationContext(), "Backlog not yet implemented", Toast.LENGTH_LONG).show();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -235,9 +228,7 @@ public class MainActivity extends AppCompatActivity
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String name = userList.get(position);
                 currentUserID = tmDB.getUserId(name);
-                totalPoints = tmDB.getTotalPointForUser(currentUserID);
-
-                txtName.setText(name);
+                setCurrentUser(currentUserID);
                 Toast.makeText(getApplicationContext(), "ID is " + currentUserID + " and points is " + totalPoints, Toast.LENGTH_LONG).show();
                 alertDialog.dismiss();
             }
@@ -265,11 +256,12 @@ public class MainActivity extends AppCompatActivity
             @Override //when user clicks on save after entering his name
             public void onClick(DialogInterface dialog, int which) {
                 newName = etName.getText().toString();
-                tmDB.insertUser(newName);
-                currentUserID = tmDB.getUserId(newName);
-                txtName.setText(newName);
-                Toast.makeText(getApplicationContext(), "ID is " + currentUserID, Toast.LENGTH_LONG).show();
+                currentUserID = tmDB.insertUser(newName);
 
+
+                setCurrentUser(currentUserID);
+                Toast.makeText(getApplicationContext(), "ID is " + currentUserID, Toast.LENGTH_LONG).show();
+                dialog.dismiss();
             }
         });
 
@@ -284,11 +276,25 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    public void setCurrentUser(int userID){
+        //Shared preference code retrieved from
+        //https://developer.android.com/training/data-storage/shared-preferences.html
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putInt(getString(R.string.sharedPrefUserID), userID);
+        editor.apply();
+        editor.commit();
+        totalPoints = tmDB.getTotalPointForUser(userID);
+        txtName.setText(tmDB.getUser(userID).getName() + " (" + totalPoints + " pt" + (totalPoints == 1 ? "" : "s") + ")");
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        int savedID = sharedPref.getInt(getString(R.string.sharedPrefUserID), -1);
         // Refresh listview when child activity has finished (i.e. Specific Task), task could have been deleted
-        if (resultCode == CHILD_DONE)
+        if (resultCode == CHILD_DONE){
             updateListView();
+            setCurrentUser(savedID);
+        }
 
     }
 
@@ -297,9 +303,6 @@ public class MainActivity extends AppCompatActivity
 
         //Pass task's ID to the detail activity so that it can load the task's values
         intent.putExtra("taskID", id);
-
-        // Pass the current user's ID, need to ensure we show appropriate actions based the user's role toward the task
-        intent.putExtra("userID", currentUserID);
 
         startActivityForResult(intent, CHILD_DONE);
     }

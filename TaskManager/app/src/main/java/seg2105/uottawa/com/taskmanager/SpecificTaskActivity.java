@@ -3,12 +3,16 @@ package seg2105.uottawa.com.taskmanager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -19,6 +23,7 @@ import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
@@ -36,7 +41,7 @@ public class SpecificTaskActivity extends AppCompatActivity {
     private Task currentTask;
     private int currentTaskID;
     private int currentUserID;
-
+    SharedPreferences sharedPref;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,12 +49,16 @@ public class SpecificTaskActivity extends AppCompatActivity {
 
         isEditMode = false;
 
+        sharedPref = getSharedPreferences("main_activity", MODE_PRIVATE);
+
         db = new TaskManagerDatabaseHandler(this);
 
         Intent intent = getIntent();
 
+
         currentTaskID = intent.getIntExtra("taskID", -1);
-        currentUserID = intent.getIntExtra("userID", -1);
+        currentUserID = sharedPref.getInt(getString(R.string.sharedPrefUserID), -1);
+
 
         setToReadOnly(null);
 
@@ -368,4 +377,14 @@ public class SpecificTaskActivity extends AppCompatActivity {
         dialog.show();
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                setResult(MainActivity.CHILD_DONE);
+                finish();
+                break;
+        }
+        return true;
+    }
 }

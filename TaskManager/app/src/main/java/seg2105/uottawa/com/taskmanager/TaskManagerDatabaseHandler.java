@@ -120,15 +120,16 @@ public class TaskManagerDatabaseHandler extends SQLiteOpenHelper {
     }
 
     //inserting a new user to TABLE_USER
-    public void insertUser(String name){
+    public int insertUser(String name){
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues cvUser = new ContentValues();
         cvUser.put(USER_NAME, name);
 
         //inserting row
-        db.insert(TABLE_USER, null, cvUser);
+        int id =  (int) db.insert(TABLE_USER, null, cvUser);
         db.close();
+        return id;
     }
 
     //inserting a new Item to TABLE_ITEM

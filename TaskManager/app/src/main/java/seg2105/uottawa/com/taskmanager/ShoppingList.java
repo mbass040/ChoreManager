@@ -1,10 +1,11 @@
-package seg2105.uottawa.com.taskmanager.source;
+package seg2105.uottawa.com.taskmanager;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -15,9 +16,8 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-import seg2105.uottawa.com.taskmanager.ItemList;
-import seg2105.uottawa.com.taskmanager.R;
-import seg2105.uottawa.com.taskmanager.TaskManagerDatabaseHandler;
+import seg2105.uottawa.com.taskmanager.source.CartItem;
+import seg2105.uottawa.com.taskmanager.source.Item;
 
 public class ShoppingList extends AppCompatActivity {
 
@@ -192,5 +192,16 @@ public class ShoppingList extends AppCompatActivity {
         }else{
             db.deleteItem(materialList.get(position).getID());
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                setResult(MainActivity.CHILD_DONE);
+                finish();
+                break;
+        }
+        return true;
     }
 }
