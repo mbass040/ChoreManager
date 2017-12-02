@@ -40,6 +40,7 @@
     <string name="modify">Modify</string>
     <string name="delete">Delete</string>
     <string name="deleteItem">Delete the item</string>
+    <string name="unassigned">Unassigned</string>
 
 
     <string-array name="shoppingListOption">

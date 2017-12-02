@@ -111,7 +111,12 @@ public class TaskManagerDatabaseHandler extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion){
-
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_USER);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_TASK);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_SHOPPING_CART);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_ITEM);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_TASK_EQUIPMENT);
+        onCreate(db);
     }
 
     //inserting a new user to TABLE_USER
@@ -270,7 +275,7 @@ public class TaskManagerDatabaseHandler extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void updateTask (int ID, String notes, String deadline, int hoursDuration, int pointValue) {
+    public void updateTask (int id, String notes, String deadline, int hoursDuration, int pointValue) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues cvTask = new ContentValues();
@@ -279,11 +284,11 @@ public class TaskManagerDatabaseHandler extends SQLiteOpenHelper {
         cvTask.put(TASK_DURATION, hoursDuration);
         cvTask.put(TASK_POINT_VALUE, pointValue);
 
-        db.update(TABLE_TASK, cvTask, TASK_ID + " = " + ID, null);
+        db.update(TABLE_TASK, cvTask, TASK_ID + " = " + id, null);
         db.close();
     }
 
-    public List<Task> getTasks(boolean meOnly) {
+    public List<Task> getTasks(boolean curUserOnly) {
         // Get tasks that are not 'Completed'
         String query = "SELECT * FROM " + TABLE_TASK + " WHERE " + TASK_STATUS + " <> 0";
 
@@ -326,6 +331,19 @@ public class TaskManagerDatabaseHandler extends SQLiteOpenHelper {
         return tasks;
     }
 
+    public void updateTaskStatus(int id, Task.TaskStatus status, int assignedTo) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues cvTask = new ContentValues();
+        cvTask.put(TASK_STATUS, status.ordinal());
+
+        if (status == Task.TaskStatus.Unassigned || status == Task.TaskStatus.Assigned)
+            cvTask.put(TASK_ASSIGNED_TO, assignedTo);
+
+        db.update(TABLE_TASK, cvTask, TASK_ID + " = " + id, null);
+        db.close();
+    }
+
     public Task getSpecificTask(int ID) {
         String query = "SELECT * FROM " + TABLE_TASK + " WHERE " + TASK_ID + " = " + ID;
 
@@ -360,6 +378,19 @@ public class TaskManagerDatabaseHandler extends SQLiteOpenHelper {
         db.close();
 
         return task;
+    }
+
+    // Delete a specific task based on its ID
+    public void deleteTask (int taskID) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // Delete foreign keys in table TaskEquipment, if any
+        db.delete(TABLE_TASK_EQUIPMENT, TASK_EQUIPMENT_TASK_ID + " = " + taskID, null);
+
+        // Delete task
+        db.delete(TABLE_TASK, TASK_ID + " = " + taskID, null);
+
+        db.close();
     }
 
     //insert a new Cart Item to TABLE_CART_ITEM
