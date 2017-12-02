@@ -69,7 +69,7 @@ public class ShoppingList extends AppCompatActivity {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 type = CartItem.ItemType.Grocery;
-                modifyDialog(position);
+                modifyDialog(position,groceryList.get(position).getItemName());
                 return true;
             }
         });
@@ -79,15 +79,33 @@ public class ShoppingList extends AppCompatActivity {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 type = CartItem.ItemType.Material;
-                modifyDialog(position);
+                modifyDialog(position,materialList.get(position).getItemName());
                 return true;
+            }
+        });
+
+        //set the click listener of grocery
+        lvGrocery.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                type = CartItem.ItemType.Grocery;
+                deleteDialog(position);
+            }
+        });
+
+        //set the click listener of material
+        lvMaterial.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                type = CartItem.ItemType.Material;
+                deleteDialog(position);
             }
         });
 
         update();
 
     }
-    public void addDialog(View view){
+    private void addDialog(View view){
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.shoppingAdd);
         final View dialogview = getLayoutInflater().inflate(R.layout.nav_add_to_shoppin,null);
@@ -117,12 +135,13 @@ public class ShoppingList extends AppCompatActivity {
         dialog.show();
     }
 
-    private void modifyDialog(final int position){
+    private void modifyDialog(final int position, String name){
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.shoppingModify);
         final View dialogview = getLayoutInflater().inflate(R.layout.nav_modify_shopping,null);
         builder.setView(dialogview);
         final EditText text = (EditText) dialogview.findViewById(R.id.txtmodifyshopping);
+        text.setText(name);
 
 
         builder.setPositiveButton(R.string.modify, new DialogInterface.OnClickListener() {
@@ -133,11 +152,9 @@ public class ShoppingList extends AppCompatActivity {
                 dialog.dismiss();
             }
         });
-        builder.setNegativeButton(R.string.delete, new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                delete(position);
-                update();
                 dialog.dismiss();
             }
         });
@@ -184,6 +201,30 @@ public class ShoppingList extends AppCompatActivity {
         }else{
             db.updateItem(materialList.get(position).getID(),name);
         }
+    }
+
+    private void deleteDialog(final int position){
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.deleteItem);
+
+        builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                delete(position);
+                update();
+                dialog.dismiss();
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     private void delete(int position){
