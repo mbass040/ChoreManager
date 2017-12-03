@@ -2,9 +2,6 @@ package seg2105.uottawa.com.taskmanager;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
@@ -12,7 +9,6 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.content.DialogInterface;
-import android.widget.TextView;
 import android.widget.Toast;
 import java.util.ArrayList;
 import android.widget.EditText;
