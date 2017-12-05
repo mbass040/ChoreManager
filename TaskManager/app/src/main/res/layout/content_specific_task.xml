@@ -281,8 +281,7 @@
                     android:layout_width="60dp"
                     android:layout_height="37dp"
                     android:layout_marginLeft="5dp"
-                    android:text="Add"
-                    android:visibility="gone"/>
+                    android:text="@string/add"/>
             </LinearLayout>
 
             <seg2105.uottawa.com.taskmanager.MaxHeightGridView

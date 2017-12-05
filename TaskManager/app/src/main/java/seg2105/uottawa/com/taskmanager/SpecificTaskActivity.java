@@ -50,7 +50,7 @@ public class SpecificTaskActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
 
-
+        // get specific values passed via Intent and within the shared preferences
         currentTaskID = intent.getIntExtra("taskID", -1);
         currentUserID = sharedPref.getInt(getString(R.string.sharedPrefUserID), -1);
 
@@ -115,8 +115,6 @@ public class SpecificTaskActivity extends AppCompatActivity {
 
         TextView tvNotes = (TextView) findViewById(R.id.tvNotes);
 
-        Button btnAddEquipment = (Button) findViewById(R.id.btnAddEquipment);
-
         EditText txtHoursToComplete = (EditText) lytHrsWrite.findViewById(R.id.txtHoursToComplete),
                 txtCompDate = (EditText) lytCompDateWrite.findViewById(R.id.txtCompDate),
                 txtPoints = (EditText) lytPoints.findViewById(R.id.txtPoints),
@@ -142,8 +140,6 @@ public class SpecificTaskActivity extends AppCompatActivity {
             txtNotes.setText(currentTask.getNotes());
 
             lytPoints.setVisibility(View.VISIBLE);
-
-            btnAddEquipment.setVisibility(View.VISIBLE);
 
             // Set values to the hoursToComplete, completionDate, and points EditTexts.
             txtHoursToComplete.setText(String.valueOf(currentTask.getHoursDuration()));
@@ -180,10 +176,20 @@ public class SpecificTaskActivity extends AppCompatActivity {
 
     private void updateTaskEquipmentGridView (Context ctx) {
         GridView gvEquipmentList = (GridView) findViewById(R.id.gvEquipmentList);
-        List<String[]> equipmentList = getEquipAsBasicMap();
 
-        TaskEquipmentAdapter adapter = new TaskEquipmentAdapter(ctx, (ArrayList<String[]>) equipmentList);
-        gvEquipmentList.setAdapter(adapter);
+        // Display different list item layout based on current view mode
+        if (isEditMode) {
+            List<String[]> equipmentList = getEquipAsBasicMap();
+
+            TaskEquipmentAdapter adapter = new TaskEquipmentAdapter(ctx, (ArrayList<String[]>) equipmentList);
+            gvEquipmentList.setAdapter(adapter);
+        }
+        else {
+            List<String> equipmentList = getEquipAsStringList();
+
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, equipmentList);
+            gvEquipmentList.setAdapter(adapter);
+        }
     }
 
     public void setToReadOnly(View view) {
@@ -203,8 +209,6 @@ public class SpecificTaskActivity extends AppCompatActivity {
         TextView tvNotes = (TextView) findViewById(R.id.tvNotes);
         EditText txtNotes = (EditText) findViewById(R.id.txtNotes);
 
-        Button btnAddEquipment = (Button) findViewById(R.id.btnAddEquipment);
-
         // Display read-only regions
         fabEdit.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(android.R.color.holo_red_dark)));
         fabCancel.setVisibility(View.GONE);
@@ -219,8 +223,6 @@ public class SpecificTaskActivity extends AppCompatActivity {
         txtNotes.setVisibility(View.GONE);
 
         lytPoints.setVisibility(View.GONE);
-
-        btnAddEquipment.setVisibility(View.GONE);
 
         fabEdit.setImageDrawable(getResources().getDrawable(android.R.drawable.ic_menu_edit));
 
