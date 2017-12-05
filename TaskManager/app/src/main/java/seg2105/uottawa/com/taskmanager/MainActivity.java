@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity
         if (justMe) {
             // Just select the tasks assigned to the current user
             for (Task task : tempList) {
-                if (task.getID() == currentUserID) {
+                if (task.getAssignedTo() == currentUserID) {
                     taskList.add(new String[]{task.getName(), task.getNotes()});
                     taskIDs.add(task.getID());
                 }
@@ -268,7 +268,6 @@ public class MainActivity extends AppCompatActivity
                 String name = userList.get(position);
                 currentUserID = tmDB.getUserId(name);
                 setCurrentUser(currentUserID);
-                Toast.makeText(getApplicationContext(), "ID is " + currentUserID + " and points is " + totalPoints, Toast.LENGTH_LONG).show();
                 alertDialog.dismiss();
             }
         });
